@@ -1,0 +1,28 @@
+<div class="page-connexion">
+  <form class="carte formulaire-connexion" [formGroup]="formulaire" (ngSubmit)="soumettre()">
+    <h1>Gestion des cartes diplomatiques</h1>
+    <p class="sous-titre">Connectez-vous pour continuer</p>
+
+    <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+
+    <div class="champ">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" autocomplete="username" />
+      <span class="erreur" *ngIf="formulaire.get('email')?.invalid && formulaire.get('email')?.touched">
+        Email valide requis.
+      </span>
+    </div>
+
+    <div class="champ">
+      <label for="motDePasse">Mot de passe</label>
+      <input id="motDePasse" type="password" formControlName="motDePasse" autocomplete="current-password" />
+      <span class="erreur" *ngIf="formulaire.get('motDePasse')?.invalid && formulaire.get('motDePasse')?.touched">
+        Mot de passe requis.
+      </span>
+    </div>
+
+    <button type="submit" class="bouton bouton-primaire bouton-pleine-largeur" [disabled]="chargement">
+      {{ chargement ? 'Connexion...' : 'Se connecter' }}
+    </button>
+  </form>
+</div>

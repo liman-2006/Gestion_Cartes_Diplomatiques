@@ -1,0 +1,41 @@
+<div class="entete-page">
+  <h1>Cartes diplomatiques</h1>
+  <a routerLink="/cartes/nouveau" class="bouton bouton-primaire">+ Nouvelle carte</a>
+</div>
+
+<div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+
+<div class="carte">
+  <table *ngIf="!chargement && cartes.length > 0">
+    <thead>
+      <tr>
+        <th>N° de carte</th>
+        <th>Bénéficiaire</th>
+        <th>Délivrance</th>
+        <th>Expiration</th>
+        <th>Statut</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let carte of cartes">
+        <td>{{ carte.numeroCarte }}</td>
+        <td>{{ beneficiaire(carte) }}</td>
+        <td>{{ carte.dateDelivrance }}</td>
+        <td>{{ carte.dateExpiration }}</td>
+        <td>
+          <span class="badge" [ngClass]="classeBadgeStatut(carte.statut)">
+            {{ libelleStatut(carte.statut) }}
+          </span>
+        </td>
+        <td class="actions-ligne">
+          <a class="bouton bouton-secondaire" [routerLink]="['/cartes', carte.id, 'modifier']">Modifier</a>
+          <button class="bouton bouton-danger" (click)="supprimer(carte)">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="chargement" class="etat-vide">Chargement...</p>
+  <p *ngIf="!chargement && cartes.length === 0" class="etat-vide">Aucune carte diplomatique enregistrée pour le moment.</p>
+</div>

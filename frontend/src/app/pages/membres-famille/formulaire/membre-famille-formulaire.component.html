@@ -1,0 +1,43 @@
+<div class="entete-page">
+  <h1>{{ modeEdition ? 'Modifier le membre de famille' : 'Nouveau membre de famille' }}</h1>
+  <a routerLink="/membres-famille" class="bouton bouton-secondaire">Retour à la liste</a>
+</div>
+
+<form class="carte" style="max-width: 520px;" [formGroup]="formulaire" (ngSubmit)="soumettre()">
+
+  <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+
+  <div class="champ">
+    <label for="expatrieId">Expatrié rattaché</label>
+    <select id="expatrieId" formControlName="expatrieId">
+      <option [ngValue]="null" disabled>Sélectionner un expatrié</option>
+      <option *ngFor="let expatrie of expatries" [ngValue]="expatrie.id">
+        {{ expatrie.prenom }} {{ expatrie.nom }} ({{ expatrie.matricule }})
+      </option>
+    </select>
+  </div>
+
+  <div class="champ">
+    <label for="nom">Nom</label>
+    <input id="nom" type="text" formControlName="nom" />
+  </div>
+
+  <div class="champ">
+    <label for="prenom">Prénom</label>
+    <input id="prenom" type="text" formControlName="prenom" />
+  </div>
+
+  <div class="champ">
+    <label for="lienParente">Lien de parenté</label>
+    <input id="lienParente" type="text" formControlName="lienParente" placeholder="Conjoint, enfant, ..." />
+  </div>
+
+  <div class="champ">
+    <label for="dateNaissance">Date de naissance</label>
+    <input id="dateNaissance" type="date" formControlName="dateNaissance" />
+  </div>
+
+  <button type="submit" class="bouton bouton-primaire" [disabled]="chargement">
+    {{ chargement ? 'Enregistrement...' : 'Enregistrer' }}
+  </button>
+</form>

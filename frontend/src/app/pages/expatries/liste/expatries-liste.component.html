@@ -1,0 +1,43 @@
+<div class="entete-page">
+  <h1>Expatriés</h1>
+  <a routerLink="/expatries/nouveau" class="bouton bouton-primaire">+ Nouvel expatrié</a>
+</div>
+
+<div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+
+<div class="carte">
+  <table *ngIf="!chargement && expatries.length > 0">
+    <thead>
+      <tr>
+        <th>Matricule</th>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Téléphone</th>
+        <th>Date d'arrivée</th>
+        <th>Statut</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let expatrie of expatries">
+        <td>{{ expatrie.matricule }}</td>
+        <td>{{ expatrie.prenom }} {{ expatrie.nom }}</td>
+        <td>{{ expatrie.email || '—' }}</td>
+        <td>{{ expatrie.telephone || '—' }}</td>
+        <td>{{ expatrie.dateArrivee || '—' }}</td>
+        <td>
+          <span class="badge" [class.badge-actif]="expatrie.actif" [class.badge-inactif]="!expatrie.actif">
+            {{ expatrie.actif ? 'Actif' : 'Inactif' }}
+          </span>
+        </td>
+        <td class="actions-ligne">
+          <a class="bouton bouton-secondaire" [routerLink]="['/expatries', expatrie.id, 'modifier']">Modifier</a>
+          <button class="bouton bouton-danger" (click)="supprimer(expatrie)">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="chargement" class="etat-vide">Chargement...</p>
+  <p *ngIf="!chargement && expatries.length === 0" class="etat-vide">Aucun expatrié enregistré pour le moment.</p>
+</div>

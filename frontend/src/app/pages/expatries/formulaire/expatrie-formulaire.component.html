@@ -1,0 +1,43 @@
+<div class="entete-page">
+  <h1>{{ modeEdition ? "Modifier l'expatrié" : 'Nouvel expatrié' }}</h1>
+  <a routerLink="/expatries" class="bouton bouton-secondaire">Retour à la liste</a>
+</div>
+
+<form class="carte" style="max-width: 520px;" [formGroup]="formulaire" (ngSubmit)="soumettre()">
+
+  <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+
+  <div class="champ">
+    <label for="nom">Nom</label>
+    <input id="nom" type="text" formControlName="nom" />
+  </div>
+
+  <div class="champ">
+    <label for="prenom">Prénom</label>
+    <input id="prenom" type="text" formControlName="prenom" />
+  </div>
+
+  <div class="champ">
+    <label for="matricule">Matricule</label>
+    <input id="matricule" type="text" formControlName="matricule" />
+  </div>
+
+  <div class="champ">
+    <label for="email">Email</label>
+    <input id="email" type="email" formControlName="email" />
+  </div>
+
+  <div class="champ">
+    <label for="telephone">Téléphone</label>
+    <input id="telephone" type="text" formControlName="telephone" />
+  </div>
+
+  <div class="champ">
+    <label for="dateArrivee">Date d'arrivée</label>
+    <input id="dateArrivee" type="date" formControlName="dateArrivee" />
+  </div>
+
+  <button type="submit" class="bouton bouton-primaire" [disabled]="chargement">
+    {{ chargement ? 'Enregistrement...' : 'Enregistrer' }}
+  </button>
+</form>

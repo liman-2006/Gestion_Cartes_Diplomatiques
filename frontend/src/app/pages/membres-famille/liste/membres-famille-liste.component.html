@@ -1,0 +1,35 @@
+<div class="entete-page">
+  <h1>Membres de famille</h1>
+  <a routerLink="/membres-famille/nouveau" class="bouton bouton-primaire">+ Nouveau membre</a>
+</div>
+
+<div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+
+<div class="carte">
+  <table *ngIf="!chargement && membres.length > 0">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Lien de parenté</th>
+        <th>Date de naissance</th>
+        <th>Expatrié rattaché</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let membre of membres">
+        <td>{{ membre.prenom }} {{ membre.nom }}</td>
+        <td>{{ membre.lienParente || '—' }}</td>
+        <td>{{ membre.dateNaissance || '—' }}</td>
+        <td>{{ membre.expatrieNomComplet }}</td>
+        <td class="actions-ligne">
+          <a class="bouton bouton-secondaire" [routerLink]="['/membres-famille', membre.id, 'modifier']">Modifier</a>
+          <button class="bouton bouton-danger" (click)="supprimer(membre)">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="chargement" class="etat-vide">Chargement...</p>
+  <p *ngIf="!chargement && membres.length === 0" class="etat-vide">Aucun membre de famille enregistré pour le moment.</p>
+</div>

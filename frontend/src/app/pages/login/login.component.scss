@@ -1,0 +1,24 @@
+.page-connexion {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.formulaire-connexion {
+  width: 100%;
+  max-width: 380px;
+}
+
+.sous-titre {
+  color: var(--couleur-texte-attenue);
+  margin: 0 0 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+.bouton-pleine-largeur {
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.5rem;
+}

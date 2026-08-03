@@ -1,0 +1,69 @@
+.coquille {
+  display: flex;
+  min-height: 100vh;
+}
+
+.barre-laterale {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--couleur-surface);
+  border-right: 1px solid var(--couleur-bordure);
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1rem;
+}
+
+.marque {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 1.5rem;
+  padding: 0 0.5rem;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.navigation a {
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--rayon);
+  color: var(--couleur-texte);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.navigation a:hover {
+  background: var(--couleur-fond);
+}
+
+.navigation a.lien-actif {
+  background: #eef2ff;
+  color: var(--couleur-primaire);
+}
+
+.pied-barre {
+  border-top: 1px solid var(--couleur-bordure);
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.utilisateur-courant {
+  font-size: 0.8rem;
+  color: var(--couleur-texte-attenue);
+  padding: 0 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contenu {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1100px;
+}

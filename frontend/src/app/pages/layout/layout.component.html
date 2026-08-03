@@ -1,0 +1,20 @@
+<div class="coquille">
+  <aside class="barre-laterale">
+    <div class="marque">Cartes Diplomatiques</div>
+
+    <nav class="navigation">
+      <a routerLink="/expatries" routerLinkActive="lien-actif">Expatriés</a>
+      <a routerLink="/membres-famille" routerLinkActive="lien-actif">Membres de famille</a>
+      <a routerLink="/cartes" routerLinkActive="lien-actif">Cartes diplomatiques</a>
+    </nav>
+
+    <div class="pied-barre">
+      <div class="utilisateur-courant">{{ authService.currentUserEmail() }}</div>
+      <button class="bouton bouton-secondaire" (click)="seDeconnecter()">Déconnexion</button>
+    </div>
+  </aside>
+
+  <main class="contenu">
+    <router-outlet></router-outlet>
+  </main>
+</div>

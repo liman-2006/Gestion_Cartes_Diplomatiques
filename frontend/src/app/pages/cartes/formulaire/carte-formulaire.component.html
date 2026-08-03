@@ -1,0 +1,56 @@
+<div class="entete-page">
+  <h1>{{ modeEdition ? 'Modifier la carte' : 'Nouvelle carte diplomatique' }}</h1>
+  <a routerLink="/cartes" class="bouton bouton-secondaire">Retour à la liste</a>
+</div>
+
+<form class="carte" style="max-width: 520px;" [formGroup]="formulaire" (ngSubmit)="soumettre()">
+
+  <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+
+  <div class="champ">
+    <label for="numeroCarte">Numéro de carte</label>
+    <input id="numeroCarte" type="text" formControlName="numeroCarte" />
+  </div>
+
+  <div class="champ">
+    <label for="dateDelivrance">Date de délivrance</label>
+    <input id="dateDelivrance" type="date" formControlName="dateDelivrance" />
+  </div>
+
+  <div class="champ">
+    <label for="dateExpiration">Date d'expiration</label>
+    <input id="dateExpiration" type="date" formControlName="dateExpiration" />
+  </div>
+
+  <div class="champ">
+    <label for="typeBeneficiaire">Bénéficiaire</label>
+    <select id="typeBeneficiaire" formControlName="typeBeneficiaire">
+      <option value="EXPATRIE">Expatrié</option>
+      <option value="MEMBRE">Membre de famille</option>
+    </select>
+  </div>
+
+  <div class="champ" *ngIf="formulaire.value.typeBeneficiaire === 'EXPATRIE'">
+    <label for="expatrieId">Expatrié</label>
+    <select id="expatrieId" formControlName="expatrieId">
+      <option [ngValue]="null" disabled>Sélectionner un expatrié</option>
+      <option *ngFor="let expatrie of expatries" [ngValue]="expatrie.id">
+        {{ expatrie.prenom }} {{ expatrie.nom }} ({{ expatrie.matricule }})
+      </option>
+    </select>
+  </div>
+
+  <div class="champ" *ngIf="formulaire.value.typeBeneficiaire === 'MEMBRE'">
+    <label for="membreFamilleId">Membre de famille</label>
+    <select id="membreFamilleId" formControlName="membreFamilleId">
+      <option [ngValue]="null" disabled>Sélectionner un membre de famille</option>
+      <option *ngFor="let membre of membres" [ngValue]="membre.id">
+        {{ membre.prenom }} {{ membre.nom }} (rattaché à {{ membre.expatrieNomComplet }})
+      </option>
+    </select>
+  </div>
+
+  <button type="submit" class="bouton bouton-primaire" [disabled]="chargement">
+    {{ chargement ? 'Enregistrement...' : 'Enregistrer' }}
+  </button>
+</form>
