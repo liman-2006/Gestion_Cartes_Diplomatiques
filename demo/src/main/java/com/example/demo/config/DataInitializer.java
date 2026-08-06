@@ -30,11 +30,11 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
 
         // Création des rôles
-        Role adminRole = roleRepository.findByNom(RoleType.ADMIN)
+        Role responsableRole = roleRepository.findByNom(RoleType.RESPONSABLE)
                 .orElseGet(() ->
                         roleRepository.save(
                                 Role.builder()
-                                        .nom(RoleType.ADMIN)
+                                        .nom(RoleType.RESPONSABLE)
                                         .build()
                         )
                 );
@@ -48,31 +48,22 @@ public class DataInitializer implements CommandLineRunner {
                         )
                 );
 
-        roleRepository.findByNom(RoleType.RESPONSABLE)
-                .orElseGet(() ->
-                        roleRepository.save(
-                                Role.builder()
-                                        .nom(RoleType.RESPONSABLE)
-                                        .build()
-                        )
-                );
-
-        // Création de l'administrateur
+        // Création du responsable logistique (super administrateur)
         if (!utilisateurRepository.existsByEmail("admin@ecobank.com")) {
 
-            Utilisateur admin = Utilisateur.builder()
+            Utilisateur responsable = Utilisateur.builder()
                     .nom("Administrateur")
                     .prenom("Système")
                     .email("admin@ecobank.com")
                     .motDePasse(passwordEncoder.encode("Admin@123"))
                     .actif(true)
-                    .role(adminRole)
+                    .role(responsableRole)
                     .build();
 
-            utilisateurRepository.save(admin);
+            utilisateurRepository.save(responsable);
 
             System.out.println("======================================");
-            System.out.println(" Administrateur créé avec succès !");
+            System.out.println(" Responsable logistique créé avec succès !");
             System.out.println(" Email : admin@ecobank.com");
             System.out.println(" Mot de passe : Admin@123");
             System.out.println("======================================");

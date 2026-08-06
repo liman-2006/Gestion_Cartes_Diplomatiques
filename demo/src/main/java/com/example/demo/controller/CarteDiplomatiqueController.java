@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,6 +57,7 @@ public class CarteDiplomatiqueController {
         return ResponseEntity.ok(carteDiplomatiqueService.trouverParId(id));
     }
 
+    @PreAuthorize("hasRole('RESPONSABLE')")
     @PutMapping("/{id}")
     public ResponseEntity<CarteDiplomatiqueResponse> modifier(
             @PathVariable Long id,
@@ -64,6 +66,7 @@ public class CarteDiplomatiqueController {
         return ResponseEntity.ok(carteDiplomatiqueService.modifier(id, request));
     }
 
+    @PreAuthorize("hasRole('RESPONSABLE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> supprimer(@PathVariable Long id) {
         carteDiplomatiqueService.supprimer(id);
