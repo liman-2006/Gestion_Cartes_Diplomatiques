@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.CarteDiplomatiqueRequest;
 import com.example.demo.dto.CarteDiplomatiqueResponse;
 import com.example.demo.service.CarteDiplomatiqueService;
+import com.example.demo.service.StatutCarteSchedulerService;
 
 import jakarta.validation.Valid;
 
@@ -12,15 +13,28 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cartes")
 public class CarteDiplomatiqueController {
 
     private final CarteDiplomatiqueService carteDiplomatiqueService;
+    private final StatutCarteSchedulerService statutCarteSchedulerService;
 
-    public CarteDiplomatiqueController(CarteDiplomatiqueService carteDiplomatiqueService) {
+    public CarteDiplomatiqueController(
+            CarteDiplomatiqueService carteDiplomatiqueService,
+            StatutCarteSchedulerService statutCarteSchedulerService
+    ) {
         this.carteDiplomatiqueService = carteDiplomatiqueService;
+        this.statutCarteSchedulerService = statutCarteSchedulerService;
+    }
+
+    @PreAuthorize("hasRole('RESPONSABLE')")
+    @PostMapping("/recalculer-statuts")
+    public ResponseEntity<Map<String, Integer>> recalculerStatuts() {
+        int cartesModifiees = statutCarteSchedulerService.recalculerEtAppliquer();
+        return ResponseEntity.ok(Map.of("cartesModifiees", cartesModifiees));
     }
 
     @PostMapping

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { authGuard } from './core/auth.guard';
+import { responsableGuard } from './core/responsable.guard';
 import { LoginComponent } from './pages/login/login.component';
 import { LayoutComponent } from './pages/layout/layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -10,6 +11,7 @@ import { MembresFamilleListeComponent } from './pages/membres-famille/liste/memb
 import { MembreFamilleFormulaireComponent } from './pages/membres-famille/formulaire/membre-famille-formulaire.component';
 import { CartesListeComponent } from './pages/cartes/liste/cartes-liste.component';
 import { CarteFormulaireComponent } from './pages/cartes/formulaire/carte-formulaire.component';
+import { ParametresComponent } from './pages/parametres/parametres.component';
 
 export const routes: Routes = [
   { path: 'connexion', component: LoginComponent },
@@ -32,7 +34,9 @@ export const routes: Routes = [
 
       { path: 'cartes', component: CartesListeComponent },
       { path: 'cartes/nouveau', component: CarteFormulaireComponent },
-      { path: 'cartes/:id/modifier', component: CarteFormulaireComponent }
+      { path: 'cartes/:id/modifier', component: CarteFormulaireComponent },
+
+      { path: 'parametres', component: ParametresComponent, canActivate: [responsableGuard] }
     ]
   },
   { path: '**', redirectTo: '' }

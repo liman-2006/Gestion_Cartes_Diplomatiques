@@ -25,11 +25,17 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {
     this.carteService.listerTous().subscribe({
       next: (cartes) => {
-        const total = cartes.filter(c => c.statut === 'EXPIRE_BIENTOT' || c.statut === 'EXPIREE').length;
+        const total = cartes.filter(c => c.statut === 'A_RENOUVELER' || c.statut === 'EXPIREE').length;
         this.nombreCartesAlerte.set(total);
       },
       error: () => this.nombreCartesAlerte.set(0)
     });
+  }
+
+  libelleRole(): string {
+    return this.authService.currentUserRole() === 'RESPONSABLE'
+      ? 'Responsable logistique'
+      : 'Agent';
   }
 
   initialesUtilisateur(): string {

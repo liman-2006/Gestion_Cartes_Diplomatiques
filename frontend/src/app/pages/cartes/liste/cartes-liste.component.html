@@ -13,6 +13,15 @@
   <input type="text" placeholder="Rechercher par numéro, bénéficiaire..." [(ngModel)]="termeRecherche" (ngModelChange)="filtrer()" />
 </div>
 
+<div class="champ">
+  <select [(ngModel)]="filtreStatut" (ngModelChange)="filtrer()">
+    <option value="">Tous les statuts</option>
+    <option value="VALIDE">Valide</option>
+    <option value="A_RENOUVELER">À renouveler</option>
+    <option value="EXPIREE">Expirée</option>
+  </select>
+</div>
+
 <div class="carte">
   <table *ngIf="!chargement && cartesFiltrees.length > 0">
     <thead>

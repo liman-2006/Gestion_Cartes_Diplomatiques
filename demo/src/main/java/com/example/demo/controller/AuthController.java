@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.security.JwtService;
 import com.example.demo.security.CustomUserDetailsService;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -54,8 +56,11 @@ public class AuthController {
         UserDetails userDetails =
                 userDetailsService.loadUserByUsername(request.getEmail());
 
-        String token = jwtService.generateToken(userDetails);
+        String role = userDetails.getAuthorities().iterator().next()
+                .getAuthority().replace("ROLE_", "");
 
-        return ResponseEntity.ok(new LoginResponse(token));
+        String token = jwtService.generateToken(Map.of("role", role), userDetails);
+
+        return ResponseEntity.ok(new LoginResponse(token, role));
     }
 }

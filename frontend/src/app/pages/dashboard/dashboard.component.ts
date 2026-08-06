@@ -71,7 +71,7 @@ export class DashboardComponent implements OnInit {
     this.nbExpatries = expatries.length;
     this.nbFamilles = membres.length;
     this.nbCartes = cartes.length;
-    this.nbCartesActives = cartes.filter(c => c.statut === 'ACTIVE').length;
+    this.nbCartesActives = cartes.filter(c => c.statut === 'VALIDE').length;
     this.nbCartesExpirees = cartes.filter(c => c.statut === 'EXPIREE').length;
 
     const cartesAvecJours: CarteAvecJours[] = cartes.map(carte => ({
@@ -106,7 +106,7 @@ export class DashboardComponent implements OnInit {
     this.degradeRepartition = `conic-gradient(#1d4ed8 0 ${this.pctEmployes}%, #93c5fd ${this.pctEmployes}% 100%)`;
 
     this.alertesRecentes = cartesAvecJours
-      .filter(c => c.statut === 'EXPIRE_BIENTOT' || c.statut === 'EXPIREE')
+      .filter(c => c.statut === 'A_RENOUVELER' || c.statut === 'EXPIREE')
       .sort((a, b) => a.joursRestants - b.joursRestants)
       .slice(0, 5);
 
@@ -128,9 +128,9 @@ export class DashboardComponent implements OnInit {
 
   classeBadgeStatut(statut: string): string {
     switch (statut) {
-      case 'ACTIVE':
+      case 'VALIDE':
         return 'badge-active';
-      case 'EXPIRE_BIENTOT':
+      case 'A_RENOUVELER':
         return 'badge-expire-bientot';
       default:
         return 'badge-expiree';
@@ -139,10 +139,10 @@ export class DashboardComponent implements OnInit {
 
   libelleStatut(statut: string): string {
     switch (statut) {
-      case 'ACTIVE':
-        return 'Active';
-      case 'EXPIRE_BIENTOT':
-        return 'Expire bientôt';
+      case 'VALIDE':
+        return 'Valide';
+      case 'A_RENOUVELER':
+        return 'À renouveler';
       default:
         return 'Expirée';
     }

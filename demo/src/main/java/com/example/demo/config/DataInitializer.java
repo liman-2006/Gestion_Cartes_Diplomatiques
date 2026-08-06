@@ -1,28 +1,35 @@
 package com.example.demo.config;
 
+import com.example.demo.entity.Parametres;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.Utilisateur;
 import com.example.demo.enums.RoleType;
+import com.example.demo.repository.ParametresRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UtilisateurRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class DataInitializer implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
     private final UtilisateurRepository utilisateurRepository;
+    private final ParametresRepository parametresRepository;
     private final PasswordEncoder passwordEncoder;
 
     public DataInitializer(
             RoleRepository roleRepository,
             UtilisateurRepository utilisateurRepository,
+            ParametresRepository parametresRepository,
             PasswordEncoder passwordEncoder
     ) {
         this.roleRepository = roleRepository;
         this.utilisateurRepository = utilisateurRepository;
+        this.parametresRepository = parametresRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -67,6 +74,19 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println(" Email : admin@ecobank.com");
             System.out.println(" Mot de passe : Admin@123");
             System.out.println("======================================");
+        }
+
+        // Création des paramètres par défaut
+        if (!parametresRepository.existsById(1L)) {
+            parametresRepository.save(
+                    Parametres.builder()
+                            .id(1L)
+                            .seuilAlerteJours(30)
+                            .notificationsEmailActivees(false)
+                            .notificationsSmsActivees(false)
+                            .dateModification(LocalDateTime.now())
+                            .build()
+            );
         }
     }
 }

@@ -1,4 +1,4 @@
-export type StatutCarte = 'ACTIVE' | 'EXPIRE_BIENTOT' | 'EXPIREE';
+export type StatutCarte = 'VALIDE' | 'A_RENOUVELER' | 'EXPIREE';
 
 export interface CarteDiplomatique {
   id: number;

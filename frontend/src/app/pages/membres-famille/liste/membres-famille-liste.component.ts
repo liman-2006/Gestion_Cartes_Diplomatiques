@@ -87,9 +87,9 @@ export class MembresFamilleListeComponent implements OnInit {
 
   classeBadgeStatut(statut: string | null): string {
     switch (statut) {
-      case 'ACTIVE':
+      case 'VALIDE':
         return 'badge-active';
-      case 'EXPIRE_BIENTOT':
+      case 'A_RENOUVELER':
         return 'badge-expire-bientot';
       case 'EXPIREE':
         return 'badge-expiree';
@@ -100,10 +100,10 @@ export class MembresFamilleListeComponent implements OnInit {
 
   libelleStatut(statut: string | null): string {
     switch (statut) {
-      case 'ACTIVE':
-        return 'Active';
-      case 'EXPIRE_BIENTOT':
-        return 'Expire bientôt';
+      case 'VALIDE':
+        return 'Valide';
+      case 'A_RENOUVELER':
+        return 'À renouveler';
       case 'EXPIREE':
         return 'Expirée';
       default:

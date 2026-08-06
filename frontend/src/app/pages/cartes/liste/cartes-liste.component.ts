@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { CarteService } from '../../../core/carte.service';
-import { CarteDiplomatique } from '../../../models/carte.model';
+import { CarteDiplomatique, StatutCarte } from '../../../models/carte.model';
 
 interface CarteAffichage extends CarteDiplomatique {
   joursRestants: number;
@@ -23,6 +23,7 @@ export class CartesListeComponent implements OnInit {
   chargement = true;
   messageErreur: string | null = null;
   termeRecherche = '';
+  filtreStatut: StatutCarte | '' = '';
 
   constructor(private carteService: CarteService) {}
 
@@ -51,15 +52,13 @@ export class CartesListeComponent implements OnInit {
   filtrer(): void {
     const terme = this.termeRecherche.trim().toLowerCase();
 
-    if (!terme) {
-      this.cartesFiltrees = this.cartes;
-      return;
-    }
-
-    this.cartesFiltrees = this.cartes.filter(carte =>
-      carte.numeroCarte.toLowerCase().includes(terme) ||
-      this.beneficiaire(carte).toLowerCase().includes(terme)
-    );
+    this.cartesFiltrees = this.cartes.filter(carte => {
+      const correspondTerme = !terme
+        || carte.numeroCarte.toLowerCase().includes(terme)
+        || this.beneficiaire(carte).toLowerCase().includes(terme);
+      const correspondStatut = !this.filtreStatut || carte.statut === this.filtreStatut;
+      return correspondTerme && correspondStatut;
+    });
   }
 
   private calculerJoursRestants(dateExpiration: string): number {
@@ -97,9 +96,9 @@ export class CartesListeComponent implements OnInit {
 
   classeBadgeStatut(statut: string): string {
     switch (statut) {
-      case 'ACTIVE':
+      case 'VALIDE':
         return 'badge-active';
-      case 'EXPIRE_BIENTOT':
+      case 'A_RENOUVELER':
         return 'badge-expire-bientot';
       default:
         return 'badge-expiree';
@@ -108,10 +107,10 @@ export class CartesListeComponent implements OnInit {
 
   libelleStatut(statut: string): string {
     switch (statut) {
-      case 'ACTIVE':
-        return 'Active';
-      case 'EXPIRE_BIENTOT':
-        return 'Expire bientôt';
+      case 'VALIDE':
+        return 'Valide';
+      case 'A_RENOUVELER':
+        return 'À renouveler';
       default:
         return 'Expirée';
     }

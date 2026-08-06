@@ -5,10 +5,12 @@ import com.example.demo.dto.CarteDiplomatiqueResponse;
 import com.example.demo.entity.CarteDiplomatique;
 import com.example.demo.entity.Expatrie;
 import com.example.demo.entity.MembreFamille;
+import com.example.demo.entity.Parametres;
 import com.example.demo.enums.StatutCarte;
 import com.example.demo.repository.CarteDiplomatiqueRepository;
 import com.example.demo.repository.ExpatrieRepository;
 import com.example.demo.repository.MembreFamilleRepository;
+import com.example.demo.repository.ParametresRepository;
 
 import org.springframework.stereotype.Service;
 
@@ -18,20 +20,23 @@ import java.util.List;
 @Service
 public class CarteDiplomatiqueService {
 
-    private static final long SEUIL_EXPIRATION_PROCHE_JOURS = 30;
+    private static final int SEUIL_PAR_DEFAUT_JOURS = 30;
 
     private final CarteDiplomatiqueRepository carteRepository;
     private final ExpatrieRepository expatrieRepository;
     private final MembreFamilleRepository membreFamilleRepository;
+    private final ParametresRepository parametresRepository;
 
     public CarteDiplomatiqueService(
             CarteDiplomatiqueRepository carteRepository,
             ExpatrieRepository expatrieRepository,
-            MembreFamilleRepository membreFamilleRepository
+            MembreFamilleRepository membreFamilleRepository,
+            ParametresRepository parametresRepository
     ) {
         this.carteRepository = carteRepository;
         this.expatrieRepository = expatrieRepository;
         this.membreFamilleRepository = membreFamilleRepository;
+        this.parametresRepository = parametresRepository;
     }
 
     public CarteDiplomatiqueResponse creer(CarteDiplomatiqueRequest request) {
@@ -167,16 +172,19 @@ public class CarteDiplomatiqueService {
     private StatutCarte calculerStatut(LocalDate dateExpiration) {
 
         LocalDate aujourdHui = LocalDate.now();
+        int seuil = parametresRepository.findById(1L)
+                .map(Parametres::getSeuilAlerteJours)
+                .orElse(SEUIL_PAR_DEFAUT_JOURS);
 
         if (dateExpiration.isBefore(aujourdHui)) {
             return StatutCarte.EXPIREE;
         }
 
-        if (!dateExpiration.isAfter(aujourdHui.plusDays(SEUIL_EXPIRATION_PROCHE_JOURS))) {
-            return StatutCarte.EXPIRE_BIENTOT;
+        if (!dateExpiration.isAfter(aujourdHui.plusDays(seuil))) {
+            return StatutCarte.A_RENOUVELER;
         }
 
-        return StatutCarte.ACTIVE;
+        return StatutCarte.VALIDE;
     }
 
     private CarteDiplomatiqueResponse versResponse(CarteDiplomatique carte) {

@@ -10,12 +10,14 @@ const TOKEN_KEY = 'gcd_token';
 interface JwtPayload {
   sub: string;
   exp: number;
+  role?: 'AGENT' | 'RESPONSABLE';
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
   readonly currentUserEmail = signal<string | null>(this.lireEmailDepuisToken());
+  readonly currentUserRole = signal<'AGENT' | 'RESPONSABLE' | null>(this.lireRoleDepuisToken());
 
   constructor(private http: HttpClient) {}
 
@@ -26,6 +28,7 @@ export class AuthService {
         tap(response => {
           localStorage.setItem(TOKEN_KEY, response.token);
           this.currentUserEmail.set(this.lireEmailDepuisToken());
+          this.currentUserRole.set(this.lireRoleDepuisToken());
         })
       );
   }
@@ -33,6 +36,11 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(TOKEN_KEY);
     this.currentUserEmail.set(null);
+    this.currentUserRole.set(null);
+  }
+
+  isResponsable(): boolean {
+    return this.currentUserRole() === 'RESPONSABLE';
   }
 
   getToken(): string | null {
@@ -52,6 +60,11 @@ export class AuthService {
   private lireEmailDepuisToken(): string | null {
     const payload = this.decoderToken(this.getToken());
     return payload ? payload.sub : null;
+  }
+
+  private lireRoleDepuisToken(): 'AGENT' | 'RESPONSABLE' | null {
+    const payload = this.decoderToken(this.getToken());
+    return payload?.role ?? null;
   }
 
   private decoderToken(token: string | null): JwtPayload | null {
