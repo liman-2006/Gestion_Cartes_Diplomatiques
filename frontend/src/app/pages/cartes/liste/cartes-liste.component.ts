@@ -1,21 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { CarteService } from '../../../core/carte.service';
 import { CarteDiplomatique } from '../../../models/carte.model';
 
+interface CarteAffichage extends CarteDiplomatique {
+  joursRestants: number;
+}
+
 @Component({
   selector: 'app-cartes-liste',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './cartes-liste.component.html'
 })
 export class CartesListeComponent implements OnInit {
 
-  cartes: CarteDiplomatique[] = [];
+  cartes: CarteAffichage[] = [];
+  cartesFiltrees: CarteAffichage[] = [];
   chargement = true;
   messageErreur: string | null = null;
+  termeRecherche = '';
 
   constructor(private carteService: CarteService) {}
 
@@ -27,7 +34,11 @@ export class CartesListeComponent implements OnInit {
     this.chargement = true;
     this.carteService.listerTous().subscribe({
       next: (donnees) => {
-        this.cartes = donnees;
+        this.cartes = donnees.map(carte => ({
+          ...carte,
+          joursRestants: this.calculerJoursRestants(carte.dateExpiration)
+        }));
+        this.filtrer();
         this.chargement = false;
       },
       error: () => {
@@ -37,14 +48,51 @@ export class CartesListeComponent implements OnInit {
     });
   }
 
+  filtrer(): void {
+    const terme = this.termeRecherche.trim().toLowerCase();
+
+    if (!terme) {
+      this.cartesFiltrees = this.cartes;
+      return;
+    }
+
+    this.cartesFiltrees = this.cartes.filter(carte =>
+      carte.numeroCarte.toLowerCase().includes(terme) ||
+      this.beneficiaire(carte).toLowerCase().includes(terme)
+    );
+  }
+
+  private calculerJoursRestants(dateExpiration: string): number {
+    const expiration = new Date(dateExpiration);
+    const aujourdHui = new Date();
+    aujourdHui.setHours(0, 0, 0, 0);
+    expiration.setHours(0, 0, 0, 0);
+    return Math.round((expiration.getTime() - aujourdHui.getTime()) / (1000 * 60 * 60 * 24));
+  }
+
   beneficiaire(carte: CarteDiplomatique): string {
     if (carte.expatrieNomComplet) {
-      return `${carte.expatrieNomComplet} (expatrié)`;
+      return carte.expatrieNomComplet;
     }
     if (carte.membreFamilleNomComplet) {
-      return `${carte.membreFamilleNomComplet} (membre de famille)`;
+      return carte.membreFamilleNomComplet;
     }
     return '—';
+  }
+
+  classeBadgeType(carte: CarteDiplomatique): string {
+    return carte.expatrieId !== null ? 'badge-type-expatrie' : 'badge-type-famille';
+  }
+
+  libelleType(carte: CarteDiplomatique): string {
+    return carte.expatrieId !== null ? 'Employé' : 'Famille';
+  }
+
+  libelleJoursRestants(joursRestants: number): string {
+    if (joursRestants < 0) {
+      return `${Math.abs(joursRestants)} j de retard`;
+    }
+    return `${joursRestants} j`;
   }
 
   classeBadgeStatut(statut: string): string {

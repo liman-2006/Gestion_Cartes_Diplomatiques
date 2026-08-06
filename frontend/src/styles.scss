@@ -12,6 +12,14 @@
   --couleur-alerte: #d97706;
   --rayon: 8px;
   --ombre: 0 1px 3px rgba(16, 24, 40, 0.08);
+
+  --barre-fond: #101b3d;
+  --barre-fond-survol: #1b2a55;
+  --barre-texte: #aab3d4;
+  --barre-texte-actif: #ffffff;
+  --barre-actif-fond: #23305f;
+  --barre-bordure: rgba(255, 255, 255, 0.08);
+  --barre-largeur: 250px;
 }
 
 * {
@@ -209,4 +217,336 @@ tbody tr:hover {
 .actions-ligne {
   display: flex;
   gap: 0.5rem;
+}
+
+/* ---------- Sous-titre de page ---------- */
+
+.sous-titre-page {
+  color: var(--couleur-texte-attenue);
+  font-size: 0.9rem;
+  margin: -0.75rem 0 1.25rem;
+}
+
+/* ---------- Barre de recherche ---------- */
+
+.barre-recherche {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.barre-recherche svg {
+  position: absolute;
+  left: 0.85rem;
+  width: 16px;
+  height: 16px;
+  color: var(--couleur-texte-attenue);
+}
+
+.barre-recherche input {
+  width: 100%;
+  padding: 0.65rem 0.9rem 0.65rem 2.5rem;
+  border: 1px solid var(--couleur-bordure);
+  border-radius: var(--rayon);
+  font-size: 0.9rem;
+  font-family: inherit;
+  background: var(--couleur-surface);
+  color: var(--couleur-texte);
+}
+
+.barre-recherche input:focus {
+  outline: 2px solid var(--couleur-primaire);
+  outline-offset: -1px;
+}
+
+/* ---------- Cartes statistiques ---------- */
+
+.grille-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.stat-carte {
+  background: var(--couleur-surface);
+  border: 1px solid var(--couleur-bordure);
+  border-radius: var(--rayon);
+  box-shadow: var(--ombre);
+  padding: 1.1rem 1.25rem;
+}
+
+.stat-carte-entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.stat-carte-etiquette {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--couleur-texte-attenue);
+}
+
+.stat-carte-valeur {
+  font-size: 1.85rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-icone {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icone svg {
+  width: 19px;
+  height: 19px;
+}
+
+.stat-icone-bleu { background: #dbeafe; color: #1d4ed8; }
+.stat-icone-gris { background: #eef1f6; color: #475569; }
+.stat-icone-vert { background: #dcfce7; color: #16a34a; }
+.stat-icone-ambre { background: #fef3c7; color: #b45309; }
+.stat-icone-rouge { background: #fee2e2; color: #dc2626; }
+
+/* ---------- Graphiques du tableau de bord ---------- */
+
+.grille-graphiques {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  .grille-graphiques {
+    grid-template-columns: 1fr;
+  }
+}
+
+.carte-titre {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1.1rem;
+}
+
+.barres-graphique {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  height: 210px;
+}
+
+.barre-colonne {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.barre-colonne .barre {
+  width: 100%;
+  max-width: 26px;
+  background: var(--couleur-primaire);
+  border-radius: 4px 4px 0 0;
+  min-height: 2px;
+  transition: height 0.25s ease;
+}
+
+.barre-mois {
+  font-size: 0.7rem;
+  color: var(--couleur-texte-attenue);
+}
+
+.donut {
+  width: 168px;
+  height: 168px;
+  border-radius: 50%;
+  margin: 0.25rem auto 1.25rem;
+  position: relative;
+}
+
+.donut::after {
+  content: '';
+  position: absolute;
+  inset: 21%;
+  background: var(--couleur-surface);
+  border-radius: 50%;
+}
+
+.donut-legende {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  font-size: 0.82rem;
+  color: var(--couleur-texte);
+}
+
+.legende-item {
+  display: flex;
+  align-items: center;
+}
+
+.legende-puce {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-right: 0.45rem;
+}
+
+/* ---------- Listes du tableau de bord ---------- */
+
+.grille-listes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .grille-listes {
+    grid-template-columns: 1fr;
+  }
+}
+
+.liste-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--couleur-bordure);
+}
+
+.liste-item:last-child {
+  border-bottom: none;
+}
+
+.liste-item-gauche {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.point-puce {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--couleur-primaire);
+  flex-shrink: 0;
+  margin-right: 0.65rem;
+}
+
+.liste-item-principal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.liste-item-titre {
+  font-weight: 600;
+  font-size: 0.87rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.liste-item-sous {
+  font-size: 0.78rem;
+  color: var(--couleur-texte-attenue);
+}
+
+/* ---------- Cellule personne (avatar + nom) ---------- */
+
+.cellule-personne {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #1d4ed8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.76rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.cellule-personne-texte {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cellule-personne-nom {
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.cellule-personne-sous {
+  font-size: 0.78rem;
+  color: var(--couleur-texte-attenue);
+}
+
+/* ---------- Badges de type ---------- */
+
+.badge-type-expatrie { background: #dbeafe; color: #1d4ed8; }
+.badge-type-famille { background: #eef1f6; color: #475569; }
+
+.texte-retard {
+  color: var(--couleur-danger);
+  font-weight: 600;
+}
+
+/* ---------- Boutons icône (actions de ligne) ---------- */
+
+.bouton-icone {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--couleur-bordure);
+  background: var(--couleur-surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--couleur-texte-attenue);
+  text-decoration: none;
+}
+
+.bouton-icone svg {
+  width: 16px;
+  height: 16px;
+}
+
+.bouton-icone:hover {
+  background: var(--couleur-fond);
+  color: var(--couleur-texte);
+}
+
+.bouton-icone-danger:hover {
+  background: #fee2e2;
+  color: var(--couleur-danger);
+  border-color: #fecaca;
 }

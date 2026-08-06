@@ -1,0 +1,154 @@
+<div class="entete-page">
+  <div>
+    <h1>Tableau de bord</h1>
+    <p class="sous-titre-page">Vue d'ensemble du portefeuille de cartes diplomatiques.</p>
+  </div>
+  <a routerLink="/cartes" class="bouton bouton-primaire">Voir les cartes</a>
+</div>
+
+<div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+
+<ng-container *ngIf="!chargement && !messageErreur">
+
+  <div class="grille-stats">
+    <div class="stat-carte">
+      <div class="stat-carte-entete">
+        <span class="stat-carte-etiquette">Expatriés</span>
+        <div class="stat-icone stat-icone-bleu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path></svg>
+        </div>
+      </div>
+      <div class="stat-carte-valeur">{{ nbExpatries }}</div>
+    </div>
+
+    <div class="stat-carte">
+      <div class="stat-carte-entete">
+        <span class="stat-carte-etiquette">Familles</span>
+        <div class="stat-icone stat-icone-gris">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3.2"></circle><circle cx="17" cy="9" r="2.6"></circle><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5.6 0 1.2.1 1.7.2"></path><path d="M13 20c.3-2.6 2.3-4.7 5-4.7 2.9 0 5.3 2.1 5.5 4.7"></path></svg>
+        </div>
+      </div>
+      <div class="stat-carte-valeur">{{ nbFamilles }}</div>
+    </div>
+
+    <div class="stat-carte">
+      <div class="stat-carte-entete">
+        <span class="stat-carte-etiquette">Cartes diplomatiques</span>
+        <div class="stat-icone stat-icone-bleu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"></rect><line x1="2.5" y1="10" x2="21.5" y2="10"></line><line x1="6" y1="14.5" x2="11" y2="14.5"></line></svg>
+        </div>
+      </div>
+      <div class="stat-carte-valeur">{{ nbCartes }}</div>
+    </div>
+
+    <div class="stat-carte">
+      <div class="stat-carte-entete">
+        <span class="stat-carte-etiquette">Cartes actives</span>
+        <div class="stat-icone stat-icone-vert">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 11 4.6-2.3 8-6 8-11V5l-8-3Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+        </div>
+      </div>
+      <div class="stat-carte-valeur">{{ nbCartesActives }}</div>
+    </div>
+
+    <div class="stat-carte">
+      <div class="stat-carte-entete">
+        <span class="stat-carte-etiquette">Cartes expirées</span>
+        <div class="stat-icone stat-icone-rouge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </div>
+      </div>
+      <div class="stat-carte-valeur">{{ nbCartesExpirees }}</div>
+    </div>
+
+    <div class="stat-carte">
+      <div class="stat-carte-entete">
+        <span class="stat-carte-etiquette">Expirent &lt; 90 j</span>
+        <div class="stat-icone stat-icone-ambre">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </div>
+      </div>
+      <div class="stat-carte-valeur">{{ nbExpirant90 }}</div>
+    </div>
+
+    <div class="stat-carte">
+      <div class="stat-carte-entete">
+        <span class="stat-carte-etiquette">Expirent &lt; 60 j</span>
+        <div class="stat-icone stat-icone-ambre">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15.5 14"></polyline></svg>
+        </div>
+      </div>
+      <div class="stat-carte-valeur">{{ nbExpirant60 }}</div>
+    </div>
+
+    <div class="stat-carte">
+      <div class="stat-carte-entete">
+        <span class="stat-carte-etiquette">Expirent &lt; 30 j</span>
+        <div class="stat-icone stat-icone-rouge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a1.8 1.8 0 0 0 1.6 2.7h17.2a1.8 1.8 0 0 0 1.6-2.7L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"></path><line x1="12" y1="9.5" x2="12" y2="13.5"></line><line x1="12" y1="16.5" x2="12.01" y2="16.5"></line></svg>
+        </div>
+      </div>
+      <div class="stat-carte-valeur">{{ nbExpirant30 }}</div>
+    </div>
+  </div>
+
+  <div class="grille-graphiques">
+    <div class="carte">
+      <div class="carte-titre">Expirations par mois</div>
+      <div class="barres-graphique">
+        <div class="barre-colonne" *ngFor="let mois of moisGraphique">
+          <div class="barre" [style.height.%]="mois.hauteur" [title]="mois.nombre + ' carte(s)'"></div>
+          <span class="barre-mois">{{ mois.libelle }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="carte">
+      <div class="carte-titre">Répartition</div>
+      <div class="donut" [style.background]="degradeRepartition"></div>
+      <div class="donut-legende">
+        <span class="legende-item"><span class="legende-puce" style="background:#1d4ed8"></span>Employés</span>
+        <span class="legende-item"><span class="legende-puce" style="background:#93c5fd"></span>Famille</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grille-listes">
+    <div class="carte">
+      <div class="carte-titre">Alertes récentes</div>
+
+      <div *ngFor="let carte of alertesRecentes" class="liste-item">
+        <div class="liste-item-gauche">
+          <span class="point-puce"></span>
+          <div class="liste-item-principal">
+            <span class="liste-item-titre">{{ carte.beneficiaire }}</span>
+            <span class="liste-item-sous">{{ carte.numeroCarte }} · Expire le {{ carte.dateExpiration }}</span>
+          </div>
+        </div>
+        <span class="badge" [ngClass]="classeBadgeStatut(carte.statut)">{{ libelleStatut(carte.statut) }}</span>
+      </div>
+
+      <p *ngIf="alertesRecentes.length === 0" class="etat-vide">Aucune alerte pour le moment.</p>
+    </div>
+
+    <div class="carte">
+      <div class="carte-titre">Prochaines expirations</div>
+
+      <div *ngFor="let carte of prochainesExpirations" class="liste-item">
+        <div class="liste-item-gauche">
+          <span class="point-puce"></span>
+          <div class="liste-item-principal">
+            <span class="liste-item-titre">{{ carte.beneficiaire }}</span>
+            <span class="liste-item-sous">{{ carte.numeroCarte }} · {{ carte.dateExpiration }}</span>
+          </div>
+        </div>
+        <span class="badge" [ngClass]="classeBadgeStatut(carte.statut)">{{ libelleStatut(carte.statut) }}</span>
+      </div>
+
+      <p *ngIf="prochainesExpirations.length === 0" class="etat-vide">Aucune carte à venir.</p>
+    </div>
+  </div>
+
+</ng-container>
+
+<p *ngIf="chargement" class="etat-vide">Chargement...</p>

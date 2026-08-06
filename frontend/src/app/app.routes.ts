@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/auth.guard';
 import { LoginComponent } from './pages/login/login.component';
 import { LayoutComponent } from './pages/layout/layout.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ExpatriesListeComponent } from './pages/expatries/liste/expatries-liste.component';
 import { ExpatrieFormulaireComponent } from './pages/expatries/formulaire/expatrie-formulaire.component';
 import { MembresFamilleListeComponent } from './pages/membres-famille/liste/membres-famille-liste.component';
@@ -17,7 +18,9 @@ export const routes: Routes = [
     component: LayoutComponent,
     canActivate: [authGuard],
     children: [
-      { path: '', redirectTo: 'expatries', pathMatch: 'full' },
+      { path: '', redirectTo: 'tableau-de-bord', pathMatch: 'full' },
+
+      { path: 'tableau-de-bord', component: DashboardComponent },
 
       { path: 'expatries', component: ExpatriesListeComponent },
       { path: 'expatries/nouveau', component: ExpatrieFormulaireComponent },

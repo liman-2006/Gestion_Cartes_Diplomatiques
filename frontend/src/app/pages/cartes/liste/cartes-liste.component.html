@@ -1,41 +1,57 @@
 <div class="entete-page">
-  <h1>Cartes diplomatiques</h1>
+  <div>
+    <h1>Cartes diplomatiques</h1>
+    <p class="sous-titre-page">Inventaire complet des cartes délivrées.</p>
+  </div>
   <a routerLink="/cartes/nouveau" class="bouton bouton-primaire">+ Nouvelle carte</a>
 </div>
 
 <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
 
+<div class="barre-recherche">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+  <input type="text" placeholder="Rechercher par numéro, bénéficiaire..." [(ngModel)]="termeRecherche" (ngModelChange)="filtrer()" />
+</div>
+
 <div class="carte">
-  <table *ngIf="!chargement && cartes.length > 0">
+  <table *ngIf="!chargement && cartesFiltrees.length > 0">
     <thead>
       <tr>
-        <th>N° de carte</th>
+        <th>Numéro</th>
         <th>Bénéficiaire</th>
+        <th>Type</th>
         <th>Délivrance</th>
         <th>Expiration</th>
+        <th>Jours restants</th>
         <th>Statut</th>
-        <th></th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let carte of cartes">
+      <tr *ngFor="let carte of cartesFiltrees">
         <td>{{ carte.numeroCarte }}</td>
         <td>{{ beneficiaire(carte) }}</td>
+        <td><span class="badge" [ngClass]="classeBadgeType(carte)">{{ libelleType(carte) }}</span></td>
         <td>{{ carte.dateDelivrance }}</td>
         <td>{{ carte.dateExpiration }}</td>
+        <td [class.texte-retard]="carte.joursRestants < 0">{{ libelleJoursRestants(carte.joursRestants) }}</td>
         <td>
           <span class="badge" [ngClass]="classeBadgeStatut(carte.statut)">
             {{ libelleStatut(carte.statut) }}
           </span>
         </td>
         <td class="actions-ligne">
-          <a class="bouton bouton-secondaire" [routerLink]="['/cartes', carte.id, 'modifier']">Modifier</a>
-          <button class="bouton bouton-danger" (click)="supprimer(carte)">Supprimer</button>
+          <a class="bouton-icone" [routerLink]="['/cartes', carte.id, 'modifier']" title="Modifier">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+          </a>
+          <button class="bouton-icone bouton-icone-danger" (click)="supprimer(carte)" title="Supprimer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
         </td>
       </tr>
     </tbody>
   </table>
 
   <p *ngIf="chargement" class="etat-vide">Chargement...</p>
-  <p *ngIf="!chargement && cartes.length === 0" class="etat-vide">Aucune carte diplomatique enregistrée pour le moment.</p>
+  <p *ngIf="!chargement && cartesFiltrees.length === 0" class="etat-vide">Aucune carte diplomatique trouvée.</p>
 </div>

@@ -1,23 +1,38 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { MembreFamilleService } from '../../../core/membre-famille.service';
+import { CarteService } from '../../../core/carte.service';
 import { MembreFamille } from '../../../models/membre-famille.model';
+
+interface MembreAffichage extends MembreFamille {
+  numeroCarte: string | null;
+  dateExpirationCarte: string | null;
+  statutCarte: string | null;
+  initiales: string;
+}
 
 @Component({
   selector: 'app-membres-famille-liste',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './membres-famille-liste.component.html'
 })
 export class MembresFamilleListeComponent implements OnInit {
 
-  membres: MembreFamille[] = [];
+  membres: MembreAffichage[] = [];
+  membresFiltres: MembreAffichage[] = [];
   chargement = true;
   messageErreur: string | null = null;
+  termeRecherche = '';
 
-  constructor(private membreFamilleService: MembreFamilleService) {}
+  constructor(
+    private membreFamilleService: MembreFamilleService,
+    private carteService: CarteService
+  ) {}
 
   ngOnInit(): void {
     this.charger();
@@ -25,9 +40,23 @@ export class MembresFamilleListeComponent implements OnInit {
 
   charger(): void {
     this.chargement = true;
-    this.membreFamilleService.listerTous().subscribe({
-      next: (donnees) => {
-        this.membres = donnees;
+    forkJoin({
+      membres: this.membreFamilleService.listerTous(),
+      cartes: this.carteService.listerTous()
+    }).subscribe({
+      next: ({ membres, cartes }) => {
+        this.membres = membres.map(membre => {
+          const carte = cartes.find(c => c.membreFamilleId === membre.id);
+
+          return {
+            ...membre,
+            numeroCarte: carte?.numeroCarte ?? null,
+            dateExpirationCarte: carte?.dateExpiration ?? null,
+            statutCarte: carte?.statut ?? null,
+            initiales: this.calculerInitiales(membre.prenom, membre.nom)
+          };
+        });
+        this.filtrer();
         this.chargement = false;
       },
       error: () => {
@@ -35,6 +64,51 @@ export class MembresFamilleListeComponent implements OnInit {
         this.chargement = false;
       }
     });
+  }
+
+  filtrer(): void {
+    const terme = this.termeRecherche.trim().toLowerCase();
+
+    if (!terme) {
+      this.membresFiltres = this.membres;
+      return;
+    }
+
+    this.membresFiltres = this.membres.filter(membre =>
+      `${membre.prenom} ${membre.nom}`.toLowerCase().includes(terme) ||
+      membre.expatrieNomComplet.toLowerCase().includes(terme) ||
+      (membre.lienParente ?? '').toLowerCase().includes(terme)
+    );
+  }
+
+  private calculerInitiales(prenom: string, nom: string): string {
+    return `${prenom.charAt(0)}${nom.charAt(0)}`.toUpperCase();
+  }
+
+  classeBadgeStatut(statut: string | null): string {
+    switch (statut) {
+      case 'ACTIVE':
+        return 'badge-active';
+      case 'EXPIRE_BIENTOT':
+        return 'badge-expire-bientot';
+      case 'EXPIREE':
+        return 'badge-expiree';
+      default:
+        return 'badge-inactif';
+    }
+  }
+
+  libelleStatut(statut: string | null): string {
+    switch (statut) {
+      case 'ACTIVE':
+        return 'Active';
+      case 'EXPIRE_BIENTOT':
+        return 'Expire bientôt';
+      case 'EXPIREE':
+        return 'Expirée';
+      default:
+        return 'Aucune carte';
+    }
   }
 
   supprimer(membre: MembreFamille): void {

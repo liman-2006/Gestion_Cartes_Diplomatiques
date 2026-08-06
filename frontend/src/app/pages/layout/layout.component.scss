@@ -4,66 +4,230 @@
 }
 
 .barre-laterale {
-  width: 240px;
+  width: var(--barre-largeur);
   flex-shrink: 0;
-  background: var(--couleur-surface);
-  border-right: 1px solid var(--couleur-bordure);
+  background: var(--barre-fond);
   display: flex;
   flex-direction: column;
-  padding: 1.25rem 1rem;
+  padding: 1.1rem 0.9rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
 }
 
 .marque {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.4rem 0.5rem 1.4rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--barre-bordure);
+}
+
+.marque-icone {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--couleur-primaire);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.marque-icone svg {
+  width: 18px;
+  height: 18px;
+}
+
+.marque-texte {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.marque-nom {
   font-weight: 700;
-  font-size: 1.05rem;
-  margin-bottom: 1.5rem;
-  padding: 0 0.5rem;
+  font-size: 0.92rem;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.marque-sous {
+  font-size: 0.72rem;
+  color: var(--barre-texte);
 }
 
 .navigation {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.2rem;
   flex: 1;
+  padding-top: 0.5rem;
 }
 
 .navigation a {
-  padding: 0.6rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.65rem 0.75rem;
   border-radius: var(--rayon);
-  color: var(--couleur-texte);
+  color: var(--barre-texte);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
 }
 
+.navigation a svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
 .navigation a:hover {
-  background: var(--couleur-fond);
+  background: var(--barre-fond-survol);
+  color: var(--barre-texte-actif);
 }
 
 .navigation a.lien-actif {
-  background: #eef2ff;
-  color: var(--couleur-primaire);
+  background: var(--barre-actif-fond);
+  color: var(--barre-texte-actif);
 }
 
 .pied-barre {
-  border-top: 1px solid var(--couleur-bordure);
-  padding-top: 1rem;
+  border-top: 1px solid var(--barre-bordure);
+  padding-top: 0.9rem;
   display: flex;
   flex-direction: column;
+  gap: 0.7rem;
+}
+
+.utilisateur-carte {
+  display: flex;
+  align-items: center;
   gap: 0.6rem;
+  padding: 0 0.25rem;
+}
+
+.avatar-barre {
+  background: var(--barre-actif-fond);
+  color: #fff;
 }
 
 .utilisateur-courant {
-  font-size: 0.8rem;
-  color: var(--couleur-texte-attenue);
-  padding: 0 0.5rem;
+  font-size: 0.78rem;
+  color: var(--barre-texte);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.bouton-deconnexion {
+  width: 100%;
+  justify-content: flex-start;
+  background: transparent;
+  color: var(--barre-texte);
+  border-color: var(--barre-bordure);
+}
+
+.bouton-deconnexion:hover {
+  background: var(--barre-fond-survol);
+  color: var(--barre-texte-actif);
+}
+
+.bouton-deconnexion svg {
+  width: 16px;
+  height: 16px;
+}
+
+.volet-principal {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.barre-superieure {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0.85rem 1.75rem;
+  background: var(--couleur-surface);
+  border-bottom: 1px solid var(--couleur-bordure);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.barre-recherche-topbar {
+  flex: 1;
+  max-width: 480px;
+  margin-bottom: 0;
+}
+
+.barre-superieure-droite {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  flex-shrink: 0;
+}
+
+.bouton-notification {
+  position: relative;
+  border-radius: 50%;
+}
+
+.pastille-notification {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--couleur-danger);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  min-width: 17px;
+  height: 17px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  border: 2px solid var(--couleur-surface);
+}
+
+.profil-utilisateur {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.profil-texte {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.profil-nom {
+  font-size: 0.85rem;
+  font-weight: 600;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profil-role {
+  font-size: 0.75rem;
+  color: var(--couleur-texte-attenue);
+}
+
 .contenu {
   flex: 1;
-  padding: 2rem;
-  max-width: 1100px;
+  padding: 1.75rem;
+  max-width: 1300px;
+  width: 100%;
 }
