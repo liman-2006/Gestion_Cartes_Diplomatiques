@@ -6,13 +6,17 @@ import com.example.demo.entity.CarteDiplomatique;
 import com.example.demo.entity.Expatrie;
 import com.example.demo.entity.MembreFamille;
 import com.example.demo.entity.Parametres;
+import com.example.demo.entity.Renouvellement;
 import com.example.demo.enums.StatutCarte;
+import com.example.demo.enums.StatutRenouvellement;
 import com.example.demo.repository.CarteDiplomatiqueRepository;
 import com.example.demo.repository.ExpatrieRepository;
 import com.example.demo.repository.MembreFamilleRepository;
 import com.example.demo.repository.ParametresRepository;
+import com.example.demo.repository.RenouvellementRepository;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,19 +30,23 @@ public class CarteDiplomatiqueService {
     private final ExpatrieRepository expatrieRepository;
     private final MembreFamilleRepository membreFamilleRepository;
     private final ParametresRepository parametresRepository;
+    private final RenouvellementRepository renouvellementRepository;
 
     public CarteDiplomatiqueService(
             CarteDiplomatiqueRepository carteRepository,
             ExpatrieRepository expatrieRepository,
             MembreFamilleRepository membreFamilleRepository,
-            ParametresRepository parametresRepository
+            ParametresRepository parametresRepository,
+            RenouvellementRepository renouvellementRepository
     ) {
         this.carteRepository = carteRepository;
         this.expatrieRepository = expatrieRepository;
         this.membreFamilleRepository = membreFamilleRepository;
         this.parametresRepository = parametresRepository;
+        this.renouvellementRepository = renouvellementRepository;
     }
 
+    @Transactional
     public CarteDiplomatiqueResponse creer(CarteDiplomatiqueRequest request) {
 
         if (carteRepository.existsByNumeroCarte(request.getNumeroCarte())) {
@@ -68,7 +76,28 @@ public class CarteDiplomatiqueService {
 
         CarteDiplomatique sauvegarde = carteRepository.save(carte);
 
+        if (request.getRenouvellementId() != null) {
+            rattacherCarteGeneree(request.getRenouvellementId(), sauvegarde);
+        }
+
         return versResponse(sauvegarde);
+    }
+
+    private void rattacherCarteGeneree(Long renouvellementId, CarteDiplomatique carteGeneree) {
+
+        Renouvellement renouvellement = renouvellementRepository.findById(renouvellementId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Renouvellement introuvable avec l'id : " + renouvellementId
+                ));
+
+        if (renouvellement.getStatut() != StatutRenouvellement.COMPLETE) {
+            throw new IllegalArgumentException(
+                    "Le renouvellement doit être terminé (tous les documents reçus) avant de créer la nouvelle carte."
+            );
+        }
+
+        renouvellement.setCarteGeneree(carteGeneree);
+        renouvellementRepository.save(renouvellement);
     }
 
     public List<CarteDiplomatiqueResponse> listerTous() {
@@ -136,12 +165,20 @@ public class CarteDiplomatiqueService {
         return versResponse(sauvegarde);
     }
 
+    @Transactional
     public void supprimer(Long id) {
         if (!carteRepository.existsById(id)) {
             throw new IllegalArgumentException(
                     "Carte introuvable avec l'id : " + id
             );
         }
+
+        List<Renouvellement> renouvellementsLies = renouvellementRepository.findByCarteGenereeId(id);
+        for (Renouvellement renouvellement : renouvellementsLies) {
+            renouvellement.setCarteGeneree(null);
+        }
+        renouvellementRepository.saveAll(renouvellementsLies);
+
         carteRepository.deleteById(id);
     }
 

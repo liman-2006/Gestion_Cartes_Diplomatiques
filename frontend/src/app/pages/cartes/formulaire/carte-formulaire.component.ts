@@ -31,6 +31,7 @@ export class CarteFormulaireComponent implements OnInit {
   messageErreur: string | null = null;
   expatries: Expatrie[] = [];
   membres: MembreFamille[] = [];
+  renouvellementIdDepuisQuery: number | null = null;
 
   formulaire = this.fb.group({
     numeroCarte: ['', Validators.required],
@@ -54,6 +55,20 @@ export class CarteFormulaireComponent implements OnInit {
     this.membreFamilleService.listerTous().subscribe({
       next: (donnees) => (this.membres = donnees)
     });
+
+    const renouvellementIdParam = this.route.snapshot.queryParamMap.get('renouvellementId');
+    const expatrieIdParam = this.route.snapshot.queryParamMap.get('expatrieId');
+
+    if (renouvellementIdParam && expatrieIdParam) {
+      this.renouvellementIdDepuisQuery = Number(renouvellementIdParam);
+      this.formulaire.patchValue({
+        typeBeneficiaire: 'EXPATRIE',
+        expatrieId: Number(expatrieIdParam),
+        dateDelivrance: new Date().toISOString().slice(0, 10)
+      });
+      this.formulaire.get('typeBeneficiaire')?.disable();
+      this.formulaire.get('expatrieId')?.disable();
+    }
 
     const idParam = this.route.snapshot.paramMap.get('id');
 
@@ -106,7 +121,8 @@ export class CarteFormulaireComponent implements OnInit {
       dateDelivrance: valeurs.dateDelivrance!,
       dateExpiration: valeurs.dateExpiration!,
       expatrieId: valeurs.typeBeneficiaire === 'EXPATRIE' ? Number(beneficiaireChoisi) : null,
-      membreFamilleId: valeurs.typeBeneficiaire === 'MEMBRE' ? Number(beneficiaireChoisi) : null
+      membreFamilleId: valeurs.typeBeneficiaire === 'MEMBRE' ? Number(beneficiaireChoisi) : null,
+      renouvellementId: this.renouvellementIdDepuisQuery
     };
 
     const observable = this.modeEdition

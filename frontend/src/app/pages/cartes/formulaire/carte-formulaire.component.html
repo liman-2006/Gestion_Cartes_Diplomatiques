@@ -7,6 +7,10 @@
 
   <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
 
+  <p class="etat-vide" *ngIf="renouvellementIdDepuisQuery">
+    Carte liée au renouvellement #{{ renouvellementIdDepuisQuery }} — le bénéficiaire est verrouillé, saisissez le numéro officiel reçu.
+  </p>
+
   <div class="champ">
     <label for="numeroCarte">Numéro de carte</label>
     <input id="numeroCarte" type="text" formControlName="numeroCarte" />
@@ -30,7 +34,7 @@
     </select>
   </div>
 
-  <div class="champ" *ngIf="formulaire.value.typeBeneficiaire === 'EXPATRIE'">
+  <div class="champ" *ngIf="formulaire.get('typeBeneficiaire')?.value === 'EXPATRIE'">
     <label for="expatrieId">Expatrié</label>
     <select id="expatrieId" formControlName="expatrieId">
       <option [ngValue]="null" disabled>Sélectionner un expatrié</option>
@@ -40,7 +44,7 @@
     </select>
   </div>
 
-  <div class="champ" *ngIf="formulaire.value.typeBeneficiaire === 'MEMBRE'">
+  <div class="champ" *ngIf="formulaire.get('typeBeneficiaire')?.value === 'MEMBRE'">
     <label for="membreFamilleId">Membre de famille</label>
     <select id="membreFamilleId" formControlName="membreFamilleId">
       <option [ngValue]="null" disabled>Sélectionner un membre de famille</option>

@@ -1,0 +1,92 @@
+<div class="entete-page">
+  <div>
+    <h1>{{ modeEdition ? 'Modifier le renouvellement' : 'Nouveau renouvellement' }}</h1>
+    <p class="sous-titre-page">Suivi d'une demande de renouvellement de carte diplomatique.</p>
+  </div>
+  <a routerLink="/renouvellements" class="bouton bouton-secondaire">Retour à la liste</a>
+</div>
+
+<div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+
+<form class="carte" [formGroup]="formulaire" (ngSubmit)="soumettre()">
+
+  <div class="champ" *ngIf="renouvellement">
+    <label>Statut</label>
+    <div>
+      <span class="badge" [ngClass]="classeBadgeStatut(renouvellement.statut)">
+        {{ libelleStatut(renouvellement.statut) }}
+      </span>
+    </div>
+  </div>
+
+  <div class="champ">
+    <label>Bénéficiaire</label>
+    <select formControlName="expatrieId">
+      <option [ngValue]="null" disabled>Sélectionner un expatrié</option>
+      <option *ngFor="let expatrie of expatries" [ngValue]="expatrie.id">
+        {{ expatrie.prenom }} {{ expatrie.nom }}
+      </option>
+    </select>
+  </div>
+
+  <div class="champ">
+    <label>Type de renouvellement</label>
+    <select formControlName="typeRenouvellement">
+      <option value="EMPLOYE_SEUL">Employé seul</option>
+      <option value="FAMILLE_ENTIERE">Famille entière</option>
+    </select>
+  </div>
+
+  <div class="champ">
+    <label>Date programmée</label>
+    <input type="date" formControlName="dateProgrammee" />
+  </div>
+
+  <div class="champ">
+    <label>Notes</label>
+    <textarea formControlName="notes" rows="3"></textarea>
+  </div>
+
+  <button type="submit" class="bouton bouton-primaire" [disabled]="chargement">
+    {{ modeEdition ? 'Enregistrer' : 'Créer le renouvellement' }}
+  </button>
+</form>
+
+<div class="carte" *ngIf="modeEdition && renouvellement">
+  <div class="carte-titre">Documents requis</div>
+
+  <div *ngFor="let document of renouvellement.documents" class="liste-item">
+    <div class="liste-item-gauche">
+      <input type="checkbox" [checked]="document.recu" (change)="basculerDocument(document.id)" />
+      <div class="liste-item-principal">
+        <span class="liste-item-titre">{{ document.nomDocument }}</span>
+      </div>
+    </div>
+    <button class="bouton-icone bouton-icone-danger" (click)="supprimerDocument(document.id)" title="Supprimer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+    </button>
+  </div>
+
+  <p *ngIf="renouvellement.documents.length === 0" class="etat-vide">Aucun document ajouté pour l'instant.</p>
+
+  <div class="champ" style="margin-top: 1rem;">
+    <label>Ajouter un document</label>
+    <div class="actions-ligne">
+      <input type="text" placeholder="Nom du document" [(ngModel)]="nouveauNomDocument" [ngModelOptions]="{standalone: true}" />
+      <button type="button" class="bouton bouton-secondaire" (click)="ajouterDocument()">Ajouter</button>
+    </div>
+  </div>
+
+  <ng-container *ngIf="renouvellement.statut === 'COMPLETE'">
+    <a *ngIf="!renouvellement.carteGenereeId"
+       class="bouton bouton-primaire"
+       style="margin-top: 1rem;"
+       [routerLink]="['/cartes/nouveau']"
+       [queryParams]="{ renouvellementId: renouvellement.id, expatrieId: renouvellement.expatrieId }">
+      Créer la nouvelle carte
+    </a>
+    <p *ngIf="renouvellement.carteGenereeId" class="etat-vide" style="margin-top: 1rem;">
+      Nouvelle carte créée : n° {{ renouvellement.carteGenereeNumero }}
+    </p>
+  </ng-container>
+</div>

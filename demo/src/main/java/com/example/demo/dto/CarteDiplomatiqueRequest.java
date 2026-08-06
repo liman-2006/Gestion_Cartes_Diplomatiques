@@ -23,4 +23,6 @@ public class CarteDiplomatiqueRequest {
     private Long expatrieId;
 
     private Long membreFamilleId;
+
+    private Long renouvellementId;
 }
