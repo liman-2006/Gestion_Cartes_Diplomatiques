@@ -16,6 +16,8 @@ import { RenouvellementsListeComponent } from './pages/renouvellements/liste/ren
 import { RenouvellementFormulaireComponent } from './pages/renouvellements/formulaire/renouvellement-formulaire.component';
 import { UtilisateursListeComponent } from './pages/utilisateurs/liste/utilisateurs-liste.component';
 import { UtilisateurFormulaireComponent } from './pages/utilisateurs/formulaire/utilisateur-formulaire.component';
+import { NotificationsComponent } from './pages/notifications/notifications.component';
+import { DocumentsComponent } from './pages/documents/documents.component';
 
 export const routes: Routes = [
   { path: 'connexion', component: LoginComponent },
@@ -43,6 +45,9 @@ export const routes: Routes = [
       { path: 'renouvellements', component: RenouvellementsListeComponent },
       { path: 'renouvellements/nouveau', component: RenouvellementFormulaireComponent },
       { path: 'renouvellements/:id/modifier', component: RenouvellementFormulaireComponent },
+
+      { path: 'notifications', component: NotificationsComponent },
+      { path: 'documents', component: DocumentsComponent },
 
       { path: 'utilisateurs', component: UtilisateursListeComponent, canActivate: [responsableGuard] },
       { path: 'utilisateurs/nouveau', component: UtilisateurFormulaireComponent, canActivate: [responsableGuard] },

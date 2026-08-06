@@ -1,0 +1,37 @@
+<div class="entete-page">
+  <div>
+    <h1>Documents</h1>
+    <p class="sous-titre-page">Vue d'ensemble des pièces requises pour tous les renouvellements en cours.</p>
+  </div>
+</div>
+
+<div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+
+<div class="barre-recherche">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+  <input type="text" placeholder="Rechercher par bénéficiaire, document..." [(ngModel)]="termeRecherche" (ngModelChange)="filtrer()" />
+</div>
+
+<div class="carte">
+  <table *ngIf="!chargement && lignesFiltrees.length > 0">
+    <thead>
+      <tr>
+        <th>Bénéficiaire</th>
+        <th>Document</th>
+        <th>Renouvellement</th>
+        <th>Reçu</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ligne of lignesFiltrees">
+        <td>{{ ligne.beneficiaire }}</td>
+        <td>{{ ligne.nomDocument }}</td>
+        <td><a [routerLink]="['/renouvellements', ligne.renouvellementId, 'modifier']">Ouvrir #{{ ligne.renouvellementId }}</a></td>
+        <td><input type="checkbox" [checked]="ligne.recu" (change)="basculerRecu(ligne)" /></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="chargement" class="etat-vide">Chargement...</p>
+  <p *ngIf="!chargement && lignesFiltrees.length === 0" class="etat-vide">Aucun document trouvé.</p>
+</div>
