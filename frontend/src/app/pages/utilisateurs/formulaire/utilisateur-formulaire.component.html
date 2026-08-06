@@ -1,0 +1,46 @@
+<div class="entete-page">
+  <h1>{{ modeEdition ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur' }}</h1>
+  <a routerLink="/utilisateurs" class="bouton bouton-secondaire">Retour à la liste</a>
+</div>
+
+<form class="carte" style="max-width: 520px;" [formGroup]="formulaire" (ngSubmit)="soumettre()">
+
+  <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+
+  <div class="champ">
+    <label for="prenom">Prénom</label>
+    <input id="prenom" type="text" formControlName="prenom" />
+  </div>
+
+  <div class="champ">
+    <label for="nom">Nom</label>
+    <input id="nom" type="text" formControlName="nom" />
+  </div>
+
+  <div class="champ">
+    <label for="email">Email</label>
+    <input id="email" type="email" formControlName="email" />
+  </div>
+
+  <div class="champ">
+    <label for="motDePasse">Mot de passe</label>
+    <input id="motDePasse" type="password" formControlName="motDePasse" />
+    <span class="erreur" *ngIf="modeEdition">Laisser vide pour conserver le mot de passe actuel.</span>
+  </div>
+
+  <div class="champ">
+    <label for="role">Rôle</label>
+    <select id="role" formControlName="role">
+      <option value="AGENT">Agent</option>
+      <option value="RESPONSABLE">Responsable logistique</option>
+    </select>
+  </div>
+
+  <div class="champ">
+    <label><input type="checkbox" formControlName="actif" /> Compte actif</label>
+  </div>
+
+  <button type="submit" class="bouton bouton-primaire" [disabled]="chargement">
+    {{ chargement ? 'Enregistrement...' : 'Enregistrer' }}
+  </button>
+</form>

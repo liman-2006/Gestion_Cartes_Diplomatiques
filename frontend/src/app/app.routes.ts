@@ -14,6 +14,8 @@ import { CarteFormulaireComponent } from './pages/cartes/formulaire/carte-formul
 import { ParametresComponent } from './pages/parametres/parametres.component';
 import { RenouvellementsListeComponent } from './pages/renouvellements/liste/renouvellements-liste.component';
 import { RenouvellementFormulaireComponent } from './pages/renouvellements/formulaire/renouvellement-formulaire.component';
+import { UtilisateursListeComponent } from './pages/utilisateurs/liste/utilisateurs-liste.component';
+import { UtilisateurFormulaireComponent } from './pages/utilisateurs/formulaire/utilisateur-formulaire.component';
 
 export const routes: Routes = [
   { path: 'connexion', component: LoginComponent },
@@ -41,6 +43,10 @@ export const routes: Routes = [
       { path: 'renouvellements', component: RenouvellementsListeComponent },
       { path: 'renouvellements/nouveau', component: RenouvellementFormulaireComponent },
       { path: 'renouvellements/:id/modifier', component: RenouvellementFormulaireComponent },
+
+      { path: 'utilisateurs', component: UtilisateursListeComponent, canActivate: [responsableGuard] },
+      { path: 'utilisateurs/nouveau', component: UtilisateurFormulaireComponent, canActivate: [responsableGuard] },
+      { path: 'utilisateurs/:id/modifier', component: UtilisateurFormulaireComponent, canActivate: [responsableGuard] },
 
       { path: 'parametres', component: ParametresComponent, canActivate: [responsableGuard] }
     ]
