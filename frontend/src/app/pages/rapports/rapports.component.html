@@ -1,0 +1,74 @@
+<div class="entete-page">
+  <div>
+    <h1>Rapports</h1>
+    <p class="sous-titre-page">Exporter et consulter les statistiques d'activité.</p>
+  </div>
+  <div class="actions-ligne">
+    <button class="bouton bouton-secondaire" [disabled]="exportEnCours !== null" (click)="exporterExcel()">
+      {{ exportEnCours === 'excel' ? 'Génération...' : 'Exporter en Excel' }}
+    </button>
+    <button class="bouton bouton-primaire" [disabled]="exportEnCours !== null" (click)="exporterPdf()">
+      {{ exportEnCours === 'pdf' ? 'Génération...' : 'Exporter en PDF' }}
+    </button>
+  </div>
+</div>
+
+<div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+
+<ng-container *ngIf="!chargement">
+
+  <div class="grille-stats">
+    <div class="stat-carte">
+      <div class="stat-carte-entete">
+        <span class="stat-carte-etiquette">Expatriés</span>
+        <div class="stat-icone stat-icone-bleu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path></svg>
+        </div>
+      </div>
+      <div class="stat-carte-valeur">{{ nbExpatries }}</div>
+    </div>
+
+    <div class="stat-carte">
+      <div class="stat-carte-entete">
+        <span class="stat-carte-etiquette">Cartes valides</span>
+        <div class="stat-icone stat-icone-vert">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 11 4.6-2.3 8-6 8-11V5l-8-3Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+        </div>
+      </div>
+      <div class="stat-carte-valeur">{{ nbCartesActives }}</div>
+    </div>
+
+    <div class="stat-carte">
+      <div class="stat-carte-entete">
+        <span class="stat-carte-etiquette">Renouvellements &lt; 90 j</span>
+        <div class="stat-icone stat-icone-ambre">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a1.8 1.8 0 0 0 1.6 2.7h17.2a1.8 1.8 0 0 0 1.6-2.7L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"></path><line x1="12" y1="9.5" x2="12" y2="13.5"></line><line x1="12" y1="16.5" x2="12.01" y2="16.5"></line></svg>
+        </div>
+      </div>
+      <div class="stat-carte-valeur">{{ nbExpirant90 }}</div>
+    </div>
+
+    <div class="stat-carte">
+      <div class="stat-carte-entete">
+        <span class="stat-carte-etiquette">Total cartes</span>
+        <div class="stat-icone stat-icone-gris">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"></rect><line x1="2.5" y1="10" x2="21.5" y2="10"></line><line x1="6" y1="14.5" x2="11" y2="14.5"></line></svg>
+        </div>
+      </div>
+      <div class="stat-carte-valeur">{{ nbCartes }}</div>
+    </div>
+  </div>
+
+  <div class="carte">
+    <div class="carte-titre">Cartes délivrées par mois</div>
+    <div class="barres-graphique">
+      <div class="barre-colonne" *ngFor="let mois of moisGraphique">
+        <div class="barre" [style.height.%]="mois.hauteur" [title]="mois.nombre + ' carte(s)'"></div>
+        <span class="barre-mois">{{ mois.libelle }}</span>
+      </div>
+    </div>
+  </div>
+
+</ng-container>
+
+<p *ngIf="chargement" class="etat-vide">Chargement...</p>

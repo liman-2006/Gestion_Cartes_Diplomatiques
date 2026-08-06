@@ -18,6 +18,7 @@ import { UtilisateursListeComponent } from './pages/utilisateurs/liste/utilisate
 import { UtilisateurFormulaireComponent } from './pages/utilisateurs/formulaire/utilisateur-formulaire.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { DocumentsComponent } from './pages/documents/documents.component';
+import { RapportsComponent } from './pages/rapports/rapports.component';
 
 export const routes: Routes = [
   { path: 'connexion', component: LoginComponent },
@@ -48,6 +49,7 @@ export const routes: Routes = [
 
       { path: 'notifications', component: NotificationsComponent },
       { path: 'documents', component: DocumentsComponent },
+      { path: 'rapports', component: RapportsComponent },
 
       { path: 'utilisateurs', component: UtilisateursListeComponent, canActivate: [responsableGuard] },
       { path: 'utilisateurs/nouveau', component: UtilisateurFormulaireComponent, canActivate: [responsableGuard] },
