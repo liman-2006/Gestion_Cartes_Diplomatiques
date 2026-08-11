@@ -8,7 +8,7 @@
 
 <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
 
-<form class="carte" [formGroup]="formulaire" (ngSubmit)="soumettre()">
+<form class="carte formulaire-page" [formGroup]="formulaire" (ngSubmit)="soumettre()">
 
   <div class="champ" *ngIf="renouvellement">
     <label>Statut</label>
@@ -47,7 +47,11 @@
     <textarea formControlName="notes" rows="3"></textarea>
   </div>
 
-  <button type="submit" class="bouton bouton-primaire" [disabled]="chargement">
+  <p *ngIf="lectureSeule" class="etat-vide">
+    Lecture seule — seul un responsable logistique peut modifier ce renouvellement.
+  </p>
+
+  <button type="submit" class="bouton bouton-primaire" *ngIf="!lectureSeule" [disabled]="chargement">
     {{ modeEdition ? 'Enregistrer' : 'Créer le renouvellement' }}
   </button>
 </form>
@@ -57,19 +61,19 @@
 
   <div *ngFor="let document of renouvellement.documents" class="liste-item">
     <div class="liste-item-gauche">
-      <input type="checkbox" [checked]="document.recu" (change)="basculerDocument(document.id)" />
+      <input type="checkbox" [checked]="document.recu" [disabled]="lectureSeule" (change)="basculerDocument(document.id)" />
       <div class="liste-item-principal">
         <span class="liste-item-titre">{{ document.nomDocument }}</span>
       </div>
     </div>
-    <button class="bouton-icone bouton-icone-danger" (click)="supprimerDocument(document.id)" title="Supprimer">
+    <button *ngIf="!lectureSeule" class="bouton-icone bouton-icone-danger" (click)="supprimerDocument(document.id)" title="Supprimer">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
     </button>
   </div>
 
   <p *ngIf="renouvellement.documents.length === 0" class="etat-vide">Aucun document ajouté pour l'instant.</p>
 
-  <div class="champ" style="margin-top: 1rem;">
+  <div class="champ" style="margin-top: 1rem;" *ngIf="!lectureSeule">
     <label>Ajouter un document</label>
     <div class="actions-ligne">
       <input type="text" placeholder="Nom du document" [(ngModel)]="nouveauNomDocument" [ngModelOptions]="{standalone: true}" />

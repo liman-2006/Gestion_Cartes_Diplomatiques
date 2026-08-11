@@ -4,6 +4,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/rou
 
 import { AuthService } from '../../core/auth.service';
 import { CarteService } from '../../core/carte.service';
+import { ThemeService } from '../../core/theme.service';
 
 @Component({
   selector: 'app-layout',
@@ -18,6 +19,7 @@ export class LayoutComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
+    public themeService: ThemeService,
     private carteService: CarteService,
     private router: Router
   ) {}
@@ -51,5 +53,9 @@ export class LayoutComponent implements OnInit {
   seDeconnecter(): void {
     this.authService.logout();
     this.router.navigate(['/connexion']);
+  }
+
+  allerAuxNotifications(): void {
+    this.router.navigate(['/notifications']);
   }
 }

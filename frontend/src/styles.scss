@@ -20,6 +20,37 @@
   --barre-actif-fond: #23305f;
   --barre-bordure: rgba(255, 255, 255, 0.08);
   --barre-largeur: 250px;
+
+  --badge-succes-fond: #dcfce7;
+  --badge-alerte-fond: #fef3c7;
+  --badge-danger-fond: #fee2e2;
+  --badge-expatrie-fond: #dbeafe;
+  --badge-famille-fond: #eef1f6;
+  --erreur-fond: #fef2f2;
+  --erreur-bordure: #fecaca;
+}
+
+:root[data-theme='sombre'] {
+  --couleur-fond: #0e1420;
+  --couleur-surface: #161d2e;
+  --couleur-bordure: #2a3346;
+  --couleur-texte: #e7ebf5;
+  --couleur-texte-attenue: #93a0bc;
+  --couleur-primaire: #3b82f6;
+  --couleur-primaire-hover: #2f6fe0;
+  --couleur-danger: #f87171;
+  --couleur-danger-hover: #ef4444;
+  --couleur-succes: #4ade80;
+  --couleur-alerte: #fbbf24;
+  --ombre: 0 1px 3px rgba(0, 0, 0, 0.45);
+
+  --badge-succes-fond: rgba(74, 222, 128, 0.16);
+  --badge-alerte-fond: rgba(251, 191, 36, 0.16);
+  --badge-danger-fond: rgba(248, 113, 113, 0.16);
+  --badge-expatrie-fond: rgba(59, 130, 246, 0.18);
+  --badge-famille-fond: rgba(148, 163, 184, 0.16);
+  --erreur-fond: rgba(248, 113, 113, 0.1);
+  --erreur-bordure: rgba(248, 113, 113, 0.35);
 }
 
 * {
@@ -135,7 +166,7 @@ tbody td {
 }
 
 tbody tr:hover {
-  background: #fafbfc;
+  background: var(--couleur-fond);
 }
 
 .champ {
@@ -158,7 +189,7 @@ tbody tr:hover {
   border-radius: var(--rayon);
   font-size: 0.9rem;
   font-family: inherit;
-  background: #fff;
+  background: var(--couleur-surface);
   color: var(--couleur-texte);
 }
 
@@ -173,10 +204,32 @@ tbody tr:hover {
   font-size: 0.78rem;
 }
 
+.champ input:disabled,
+.champ select:disabled {
+  background: var(--couleur-fond);
+  color: var(--couleur-texte-attenue);
+  cursor: not-allowed;
+}
+
+.indication-champ {
+  font-size: 0.78rem;
+  color: var(--couleur-texte-attenue);
+}
+
 .message-erreur {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  background: var(--erreur-fond);
+  border: 1px solid var(--erreur-bordure);
   color: var(--couleur-danger);
+  border-radius: var(--rayon);
+  padding: 0.7rem 0.9rem;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.message-succes {
+  background: var(--badge-succes-fond);
+  border: 1px solid var(--badge-succes-fond);
+  color: var(--couleur-succes);
   border-radius: var(--rayon);
   padding: 0.7rem 0.9rem;
   font-size: 0.85rem;
@@ -193,18 +246,18 @@ tbody tr:hover {
 
 .badge-actif,
 .badge-active {
-  background: #dcfce7;
+  background: var(--badge-succes-fond);
   color: var(--couleur-succes);
 }
 
 .badge-expire-bientot {
-  background: #fef3c7;
+  background: var(--badge-alerte-fond);
   color: var(--couleur-alerte);
 }
 
 .badge-expiree,
 .badge-inactif {
-  background: #fee2e2;
+  background: var(--badge-danger-fond);
   color: var(--couleur-danger);
 }
 
@@ -260,6 +313,57 @@ tbody tr:hover {
   outline-offset: -1px;
 }
 
+/* ---------- Barre de filtres ---------- */
+
+.barre-filtres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.barre-filtres .champ {
+  margin-bottom: 0;
+  min-width: 200px;
+}
+
+.champ-periode {
+  min-width: auto;
+}
+
+.periode-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--couleur-texte-attenue);
+}
+
+.periode-inputs input {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--couleur-bordure);
+  border-radius: var(--rayon);
+  font-size: 0.9rem;
+  font-family: inherit;
+  background: var(--couleur-surface);
+  color: var(--couleur-texte);
+}
+
+.carte-tableau-rapport {
+  margin-top: 1rem;
+}
+
+/* ---------- Formulaires centrés ---------- */
+
+.formulaire-page {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.formulaire-page + .carte {
+  max-width: 560px;
+  margin: 1.25rem auto 0;
+}
+
 /* ---------- Cartes statistiques ---------- */
 
 .grille-stats {
@@ -313,11 +417,11 @@ tbody tr:hover {
   height: 19px;
 }
 
-.stat-icone-bleu { background: #dbeafe; color: #1d4ed8; }
-.stat-icone-gris { background: #eef1f6; color: #475569; }
-.stat-icone-vert { background: #dcfce7; color: #16a34a; }
-.stat-icone-ambre { background: #fef3c7; color: #b45309; }
-.stat-icone-rouge { background: #fee2e2; color: #dc2626; }
+.stat-icone-bleu { background: var(--badge-expatrie-fond); color: var(--couleur-primaire); }
+.stat-icone-gris { background: var(--badge-famille-fond); color: var(--couleur-texte-attenue); }
+.stat-icone-vert { background: var(--badge-succes-fond); color: var(--couleur-succes); }
+.stat-icone-ambre { background: var(--badge-alerte-fond); color: var(--couleur-alerte); }
+.stat-icone-rouge { background: var(--badge-danger-fond); color: var(--couleur-danger); }
 
 /* ---------- Graphiques du tableau de bord ---------- */
 
@@ -483,8 +587,8 @@ tbody tr:hover {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: var(--badge-expatrie-fond);
+  color: var(--couleur-primaire);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -511,8 +615,8 @@ tbody tr:hover {
 
 /* ---------- Badges de type ---------- */
 
-.badge-type-expatrie { background: #dbeafe; color: #1d4ed8; }
-.badge-type-famille { background: #eef1f6; color: #475569; }
+.badge-type-expatrie { background: var(--badge-expatrie-fond); color: var(--couleur-primaire); }
+.badge-type-famille { background: var(--badge-famille-fond); color: var(--couleur-texte-attenue); }
 
 .texte-retard {
   color: var(--couleur-danger);

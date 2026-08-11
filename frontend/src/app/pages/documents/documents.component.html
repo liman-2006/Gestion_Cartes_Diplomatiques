@@ -27,7 +27,7 @@
         <td>{{ ligne.beneficiaire }}</td>
         <td>{{ ligne.nomDocument }}</td>
         <td><a [routerLink]="['/renouvellements', ligne.renouvellementId, 'modifier']">Ouvrir #{{ ligne.renouvellementId }}</a></td>
-        <td><input type="checkbox" [checked]="ligne.recu" (change)="basculerRecu(ligne)" /></td>
+        <td><input type="checkbox" [checked]="ligne.recu" [disabled]="!authService.isResponsable()" (change)="basculerRecu(ligne)" /></td>
       </tr>
     </tbody>
   </table>

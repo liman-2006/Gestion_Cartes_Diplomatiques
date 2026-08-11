@@ -25,6 +25,7 @@ import java.util.List;
 public class CarteDiplomatiqueService {
 
     private static final int SEUIL_PAR_DEFAUT_JOURS = 30;
+    private static final int DUREE_VALIDITE_ANNEES = 3;
 
     private final CarteDiplomatiqueRepository carteRepository;
     private final ExpatrieRepository expatrieRepository;
@@ -65,11 +66,13 @@ public class CarteDiplomatiqueService {
                     ));
         }
 
+        LocalDate dateExpiration = request.getDateDelivrance().plusYears(DUREE_VALIDITE_ANNEES);
+
         CarteDiplomatique carte = CarteDiplomatique.builder()
                 .numeroCarte(request.getNumeroCarte())
                 .dateDelivrance(request.getDateDelivrance())
-                .dateExpiration(request.getDateExpiration())
-                .statut(calculerStatut(request.getDateExpiration()))
+                .dateExpiration(dateExpiration)
+                .statut(calculerStatut(dateExpiration))
                 .expatrie(expatrie)
                 .membreFamille(membreFamille)
                 .build();
@@ -153,10 +156,12 @@ public class CarteDiplomatiqueService {
                     ));
         }
 
+        LocalDate dateExpiration = request.getDateDelivrance().plusYears(DUREE_VALIDITE_ANNEES);
+
         carte.setNumeroCarte(request.getNumeroCarte());
         carte.setDateDelivrance(request.getDateDelivrance());
-        carte.setDateExpiration(request.getDateExpiration());
-        carte.setStatut(calculerStatut(request.getDateExpiration()));
+        carte.setDateExpiration(dateExpiration);
+        carte.setStatut(calculerStatut(dateExpiration));
         carte.setExpatrie(expatrie);
         carte.setMembreFamille(membreFamille);
 

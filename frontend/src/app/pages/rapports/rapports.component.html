@@ -15,6 +15,49 @@
 
 <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
 
+<div class="barre-filtres" *ngIf="!chargement">
+  <div class="champ">
+    <select [(ngModel)]="filtreStatut" (ngModelChange)="appliquerFiltres()">
+      <option value="">Tous les statuts</option>
+      <option value="VALIDE">Valide</option>
+      <option value="A_RENOUVELER">À renouveler</option>
+      <option value="EXPIREE">Expirée</option>
+    </select>
+  </div>
+
+  <div class="champ">
+    <select [(ngModel)]="filtreBeneficiaire" (ngModelChange)="appliquerFiltres()">
+      <option value="">Employés et familles</option>
+      <option value="EXPATRIE">Employés uniquement</option>
+      <option value="MEMBRE">Membres de famille uniquement</option>
+    </select>
+  </div>
+
+  <div class="champ">
+    <select [(ngModel)]="filtreAnnee" [disabled]="!!(dateDebut && dateFin)" (ngModelChange)="appliquerFiltres()">
+      <option value="">Toutes les années</option>
+      <option *ngFor="let annee of anneesDisponibles" [ngValue]="annee">{{ annee }}</option>
+    </select>
+  </div>
+
+  <div class="champ champ-periode">
+    <div class="periode-inputs">
+      <input type="date" [(ngModel)]="dateDebut" (ngModelChange)="appliquerFiltres()" title="Début de période" />
+      <span>→</span>
+      <input type="date" [(ngModel)]="dateFin" (ngModelChange)="appliquerFiltres()" title="Fin de période" />
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="bouton bouton-secondaire"
+    *ngIf="filtreAnnee || dateDebut || dateFin"
+    (click)="reinitialiserPeriode()"
+  >
+    Réinitialiser la période
+  </button>
+</div>
+
 <ng-container *ngIf="!chargement">
 
   <div class="grille-stats">
@@ -67,6 +110,39 @@
         <span class="barre-mois">{{ mois.libelle }}</span>
       </div>
     </div>
+  </div>
+
+  <div class="carte carte-tableau-rapport">
+    <div class="carte-titre">Détail des cartes ({{ cartesFiltrees.length }})</div>
+
+    <table *ngIf="cartesFiltrees.length > 0">
+      <thead>
+        <tr>
+          <th>Numéro</th>
+          <th>Bénéficiaire</th>
+          <th>Type</th>
+          <th>Délivrance</th>
+          <th>Expiration</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let carte of cartesFiltrees">
+          <td>{{ carte.numeroCarte }}</td>
+          <td>{{ beneficiaire(carte) }}</td>
+          <td><span class="badge" [ngClass]="classeBadgeType(carte)">{{ libelleType(carte) }}</span></td>
+          <td>{{ carte.dateDelivrance }}</td>
+          <td>{{ carte.dateExpiration }}</td>
+          <td>
+            <span class="badge" [ngClass]="classeBadgeStatut(carte.statut)">
+              {{ libelleStatut(carte.statut) }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="cartesFiltrees.length === 0" class="etat-vide">Aucune carte ne correspond à ces filtres.</p>
   </div>
 
 </ng-container>

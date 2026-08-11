@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { RenouvellementService } from '../../../core/renouvellement.service';
 import { ExpatrieService } from '../../../core/expatrie.service';
+import { AuthService } from '../../../core/auth.service';
 import { Expatrie } from '../../../models/expatrie.model';
 import { Renouvellement, TypeRenouvellement } from '../../../models/renouvellement.model';
 
@@ -21,6 +22,7 @@ export class RenouvellementFormulaireComponent implements OnInit {
   private expatrieService = inject(ExpatrieService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  public authService = inject(AuthService);
 
   id: number | null = null;
   chargement = false;
@@ -38,6 +40,10 @@ export class RenouvellementFormulaireComponent implements OnInit {
 
   get modeEdition(): boolean {
     return this.id !== null;
+  }
+
+  get lectureSeule(): boolean {
+    return this.modeEdition && !this.authService.isResponsable();
   }
 
   ngOnInit(): void {
@@ -65,6 +71,9 @@ export class RenouvellementFormulaireComponent implements OnInit {
           dateProgrammee: renouvellement.dateProgrammee,
           notes: renouvellement.notes ?? ''
         });
+        if (this.lectureSeule) {
+          this.formulaire.disable();
+        }
         this.chargement = false;
       },
       error: () => {

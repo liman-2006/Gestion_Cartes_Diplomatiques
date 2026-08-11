@@ -3,7 +3,7 @@
   <a routerLink="/utilisateurs" class="bouton bouton-secondaire">Retour à la liste</a>
 </div>
 
-<form class="carte" style="max-width: 520px;" [formGroup]="formulaire" (ngSubmit)="soumettre()">
+<form class="carte formulaire-page" [formGroup]="formulaire" (ngSubmit)="soumettre()">
 
   <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
 

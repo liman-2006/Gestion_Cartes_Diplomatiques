@@ -7,6 +7,7 @@ import { forkJoin } from 'rxjs';
 import { ExpatrieService } from '../../../core/expatrie.service';
 import { MembreFamilleService } from '../../../core/membre-famille.service';
 import { CarteService } from '../../../core/carte.service';
+import { AuthService } from '../../../core/auth.service';
 import { Expatrie } from '../../../models/expatrie.model';
 
 interface ExpatrieAffichage extends Expatrie {
@@ -32,7 +33,8 @@ export class ExpatriesListeComponent implements OnInit {
   constructor(
     private expatrieService: ExpatrieService,
     private membreFamilleService: MembreFamilleService,
-    private carteService: CarteService
+    private carteService: CarteService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {

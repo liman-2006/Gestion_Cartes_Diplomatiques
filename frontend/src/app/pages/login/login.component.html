@@ -1,28 +1,118 @@
 <div class="page-connexion">
-  <form class="carte formulaire-connexion" [formGroup]="formulaire" (ngSubmit)="soumettre()">
-    <h1>Gestion des cartes diplomatiques</h1>
-    <p class="sous-titre">Connectez-vous pour continuer</p>
 
-    <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+  <div class="panneau-heros">
+    <div class="forme forme-1"></div>
+    <div class="forme forme-2"></div>
+    <div class="forme forme-3"></div>
 
-    <div class="champ">
-      <label for="email">Email</label>
-      <input id="email" type="email" formControlName="email" autocomplete="username" />
-      <span class="erreur" *ngIf="formulaire.get('email')?.invalid && formulaire.get('email')?.touched">
-        Email valide requis.
-      </span>
+    <div class="heros-illustration" aria-hidden="true">
+      <div class="illustration-carte">
+        <svg viewBox="0 0 220 140" fill="none">
+          <defs>
+            <linearGradient id="gradCarte" x1="0" y1="0" x2="220" y2="140" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#33488c"/>
+              <stop offset="1" stop-color="#111c40"/>
+            </linearGradient>
+          </defs>
+          <rect x="4" y="4" width="212" height="132" rx="14" fill="url(#gradCarte)" stroke="rgba(255,255,255,0.28)" stroke-width="1.5"/>
+          <circle cx="42" cy="46" r="18" fill="rgba(255,255,255,0.2)"/>
+          <path d="M28 80c0-9 6.3-15 14-15s14 6 14 15" stroke="rgba(255,255,255,0.38)" stroke-width="3" stroke-linecap="round"/>
+          <rect x="78" y="30" width="112" height="8" rx="4" fill="rgba(255,255,255,0.32)"/>
+          <rect x="78" y="47" width="92" height="6" rx="3" fill="rgba(255,255,255,0.2)"/>
+          <rect x="78" y="59" width="72" height="6" rx="3" fill="rgba(255,255,255,0.2)"/>
+          <rect x="18" y="102" width="36" height="23" rx="4" fill="rgba(255,255,255,0.14)"/>
+          <line x1="24" y1="109" x2="48" y2="109" stroke="rgba(255,255,255,0.42)" stroke-width="1.5"/>
+          <line x1="24" y1="115" x2="48" y2="115" stroke="rgba(255,255,255,0.42)" stroke-width="1.5"/>
+          <line x1="24" y1="121" x2="41" y2="121" stroke="rgba(255,255,255,0.42)" stroke-width="1.5"/>
+          <circle cx="188" cy="112" r="15" fill="rgba(255,255,255,0.14)"/>
+          <path d="M181 112.5 186 117.5 196 106.5" stroke="#4ade80" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="illustration-ombre"></div>
+      </div>
+
+      <div class="badge-flottant badge-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 11 4.6-2.3 8-6 8-11V5l-8-3Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+      </div>
+      <div class="badge-flottant badge-2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15.5 14"></polyline></svg>
+      </div>
+      <div class="badge-flottant badge-3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3.2"></circle><circle cx="17" cy="9" r="2.6"></circle><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5.6 0 1.2.1 1.7.2"></path><path d="M13 20c.3-2.6 2.3-4.7 5-4.7 2.9 0 5.3 2.1 5.5 4.7"></path></svg>
+      </div>
     </div>
 
-    <div class="champ">
-      <label for="motDePasse">Mot de passe</label>
-      <input id="motDePasse" type="password" formControlName="motDePasse" autocomplete="current-password" />
-      <span class="erreur" *ngIf="formulaire.get('motDePasse')?.invalid && formulaire.get('motDePasse')?.touched">
-        Mot de passe requis.
-      </span>
-    </div>
+    <div class="heros-contenu">
+      <div class="heros-marque">
+        <div class="heros-logo-fond">
+          <img src="logo/LogoEcobank.png" alt="Ecobank" class="heros-logo-img" />
+        </div>
+      </div>
 
-    <button type="submit" class="bouton bouton-primaire bouton-pleine-largeur" [disabled]="chargement">
-      {{ chargement ? 'Connexion...' : 'Se connecter' }}
-    </button>
-  </form>
+      <h1>Pilotez l'ensemble de vos cartes diplomatiques en toute sérénité</h1>
+      <p class="heros-soustitre">
+        Suivi des expatriés, des membres de famille et des renouvellements, réunis dans un seul espace.
+      </p>
+
+      <div class="heros-horloge">
+        <span class="heros-heure">{{ heureActuelle() }}</span>
+        <span class="heros-date">{{ dateActuelle() }}</span>
+      </div>
+
+      <div class="heros-points-forts">
+        <div class="point-fort" *ngFor="let point of pointsForts; let i = index" [style.animation-delay.ms]="500 + i * 120">
+          <div class="point-fort-icone">
+            <svg *ngIf="point.icone === 'carte'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"></rect><line x1="2.5" y1="10" x2="21.5" y2="10"></line></svg>
+            <svg *ngIf="point.icone === 'horloge'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15.5 14"></polyline></svg>
+            <svg *ngIf="point.icone === 'alerte'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a1.8 1.8 0 0 0 1.6 2.7h17.2a1.8 1.8 0 0 0 1.6-2.7L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"></path><line x1="12" y1="9.5" x2="12" y2="13.5"></line><line x1="12" y1="16.5" x2="12.01" y2="16.5"></line></svg>
+            <svg *ngIf="point.icone === 'rapport'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"></path><path d="M14 3v5h5"></path><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="13" y2="17"></line></svg>
+          </div>
+          <div>
+            <div class="point-fort-titre">{{ point.titre }}</div>
+            <div class="point-fort-description">{{ point.description }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panneau-formulaire">
+    <form class="carte formulaire-connexion" [formGroup]="formulaire" (ngSubmit)="soumettre()">
+      <h1>Connexion</h1>
+      <p class="sous-titre">Accédez à votre espace de gestion</p>
+
+      <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
+
+      <div class="champ">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" autocomplete="username" placeholder="nom&#64;exemple.com" />
+        <span class="erreur" *ngIf="formulaire.get('email')?.invalid && formulaire.get('email')?.touched">
+          Email valide requis.
+        </span>
+      </div>
+
+      <div class="champ">
+        <label for="motDePasse">Mot de passe</label>
+        <div class="champ-mot-de-passe">
+          <input
+            id="motDePasse"
+            [type]="afficherMotDePasse ? 'text' : 'password'"
+            formControlName="motDePasse"
+            autocomplete="current-password"
+          />
+          <button type="button" class="bouton-oeil" (click)="basculerAffichageMotDePasse()" [attr.aria-label]="afficherMotDePasse ? 'Masquer le mot de passe' : 'Afficher le mot de passe'">
+            <svg *ngIf="!afficherMotDePasse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <svg *ngIf="afficherMotDePasse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"></path><path d="M10.6 5.1A10.9 10.9 0 0 1 12 5c7 0 10.5 7 10.5 7a13.2 13.2 0 0 1-3.1 3.9M6.4 6.4C3.1 8.4 1.5 12 1.5 12s3.5 7 10.5 7a10.6 10.6 0 0 0 4.6-1"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg>
+          </button>
+        </div>
+        <span class="erreur" *ngIf="formulaire.get('motDePasse')?.invalid && formulaire.get('motDePasse')?.touched">
+          Mot de passe requis.
+        </span>
+      </div>
+
+      <button type="submit" class="bouton bouton-primaire bouton-pleine-largeur" [disabled]="chargement">
+        {{ chargement ? 'Connexion...' : 'Se connecter' }}
+      </button>
+    </form>
+  </div>
+
 </div>

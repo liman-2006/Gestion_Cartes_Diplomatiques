@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { RenouvellementService } from '../../core/renouvellement.service';
+import { AuthService } from '../../core/auth.service';
 
 interface LigneDocument {
   documentId: number;
@@ -27,7 +28,10 @@ export class DocumentsComponent implements OnInit {
   messageErreur: string | null = null;
   termeRecherche = '';
 
-  constructor(private renouvellementService: RenouvellementService) {}
+  constructor(
+    private renouvellementService: RenouvellementService,
+    public authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.charger();

@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.CarteDiplomatiqueResponse;
+import com.example.demo.enums.StatutCarte;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -35,9 +37,10 @@ public class RapportService {
         this.carteDiplomatiqueService = carteDiplomatiqueService;
     }
 
-    public byte[] genererExcel() {
+    public byte[] genererExcel(String statut, String typeBeneficiaire, LocalDate dateDebut, LocalDate dateFin) {
 
-        List<CarteDiplomatiqueResponse> cartes = carteDiplomatiqueService.listerTous();
+        List<CarteDiplomatiqueResponse> cartes =
+                filtrer(carteDiplomatiqueService.listerTous(), statut, typeBeneficiaire, dateDebut, dateFin);
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 
@@ -87,9 +90,10 @@ public class RapportService {
         c5.setCellValue(carte.getStatut().name());
     }
 
-    public byte[] genererPdf() {
+    public byte[] genererPdf(String statut, String typeBeneficiaire, LocalDate dateDebut, LocalDate dateFin) {
 
-        List<CarteDiplomatiqueResponse> cartes = carteDiplomatiqueService.listerTous();
+        List<CarteDiplomatiqueResponse> cartes =
+                filtrer(carteDiplomatiqueService.listerTous(), statut, typeBeneficiaire, dateDebut, dateFin);
 
         try (ByteArrayOutputStream sortie = new ByteArrayOutputStream()) {
 
@@ -147,5 +151,23 @@ public class RapportService {
             return carte.getMembreFamilleNomComplet();
         }
         return "—";
+    }
+
+    private List<CarteDiplomatiqueResponse> filtrer(
+            List<CarteDiplomatiqueResponse> cartes,
+            String statut,
+            String typeBeneficiaire,
+            LocalDate dateDebut,
+            LocalDate dateFin
+    ) {
+        return cartes.stream()
+                .filter(carte -> statut == null || statut.isBlank()
+                        || carte.getStatut() == StatutCarte.valueOf(statut))
+                .filter(carte -> typeBeneficiaire == null || typeBeneficiaire.isBlank()
+                        || ("EXPATRIE".equals(typeBeneficiaire) && carte.getExpatrieId() != null)
+                        || ("MEMBRE".equals(typeBeneficiaire) && carte.getMembreFamilleId() != null))
+                .filter(carte -> dateDebut == null || !carte.getDateDelivrance().isBefore(dateDebut))
+                .filter(carte -> dateFin == null || !carte.getDateDelivrance().isAfter(dateFin))
+                .toList();
     }
 }

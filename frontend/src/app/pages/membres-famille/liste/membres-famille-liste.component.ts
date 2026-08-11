@@ -6,6 +6,7 @@ import { forkJoin } from 'rxjs';
 
 import { MembreFamilleService } from '../../../core/membre-famille.service';
 import { CarteService } from '../../../core/carte.service';
+import { AuthService } from '../../../core/auth.service';
 import { MembreFamille } from '../../../models/membre-famille.model';
 
 interface MembreAffichage extends MembreFamille {
@@ -31,7 +32,8 @@ export class MembresFamilleListeComponent implements OnInit {
 
   constructor(
     private membreFamilleService: MembreFamilleService,
-    private carteService: CarteService
+    private carteService: CarteService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {

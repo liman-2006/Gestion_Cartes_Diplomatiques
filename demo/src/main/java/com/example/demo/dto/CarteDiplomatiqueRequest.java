@@ -17,9 +17,6 @@ public class CarteDiplomatiqueRequest {
     @NotNull(message = "La date de délivrance est obligatoire")
     private LocalDate dateDelivrance;
 
-    @NotNull(message = "La date d'expiration est obligatoire")
-    private LocalDate dateExpiration;
-
     private Long expatrieId;
 
     private Long membreFamilleId;

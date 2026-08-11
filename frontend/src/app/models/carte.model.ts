@@ -15,7 +15,6 @@ export interface CarteDiplomatique {
 export interface CarteDiplomatiqueRequest {
   numeroCarte: string;
   dateDelivrance: string;
-  dateExpiration: string;
   expatrieId: number | null;
   membreFamilleId: number | null;
   renouvellementId?: number | null;

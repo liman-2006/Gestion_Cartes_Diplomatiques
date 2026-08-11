@@ -3,7 +3,7 @@
   <a routerLink="/cartes" class="bouton bouton-secondaire">Retour à la liste</a>
 </div>
 
-<form class="carte" style="max-width: 520px;" [formGroup]="formulaire" (ngSubmit)="soumettre()">
+<form class="carte formulaire-page" [formGroup]="formulaire" (ngSubmit)="soumettre()">
 
   <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
 
@@ -24,6 +24,7 @@
   <div class="champ">
     <label for="dateExpiration">Date d'expiration</label>
     <input id="dateExpiration" type="date" formControlName="dateExpiration" />
+    <span class="indication-champ">Calculée automatiquement : délivrance + 3 ans (validité réglementaire).</span>
   </div>
 
   <div class="champ">

@@ -67,6 +67,7 @@ public class RenouvellementController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('RESPONSABLE')")
     @PostMapping("/{id}/documents")
     public ResponseEntity<RenouvellementResponse> ajouterDocument(
             @PathVariable Long id,
@@ -76,6 +77,7 @@ public class RenouvellementController {
                 .body(renouvellementService.ajouterDocument(id, request));
     }
 
+    @PreAuthorize("hasRole('RESPONSABLE')")
     @PatchMapping("/documents/{documentId}/basculer")
     public ResponseEntity<RenouvellementResponse> basculerDocumentRecu(
             @PathVariable Long documentId
@@ -83,6 +85,7 @@ public class RenouvellementController {
         return ResponseEntity.ok(renouvellementService.basculerDocumentRecu(documentId));
     }
 
+    @PreAuthorize("hasRole('RESPONSABLE')")
     @DeleteMapping("/documents/{documentId}")
     public ResponseEntity<RenouvellementResponse> supprimerDocument(
             @PathVariable Long documentId

@@ -6,9 +6,9 @@
 </div>
 
 <div class="message-erreur" *ngIf="messageErreur">{{ messageErreur }}</div>
-<div class="message-erreur" *ngIf="messageSucces" style="background:#dcfce7;color:#166534;border-color:#bbf7d0;">{{ messageSucces }}</div>
+<div class="message-succes" *ngIf="messageSucces">{{ messageSucces }}</div>
 
-<form class="carte" [formGroup]="formulaire" (ngSubmit)="soumettre()">
+<form class="carte formulaire-page" [formGroup]="formulaire" (ngSubmit)="soumettre()">
 
   <div class="champ">
     <label>Seuil d'alerte (jours avant expiration)</label>

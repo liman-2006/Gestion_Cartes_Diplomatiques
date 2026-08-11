@@ -4,11 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { CarteService } from '../../../core/carte.service';
+import { AuthService } from '../../../core/auth.service';
 import { CarteDiplomatique, StatutCarte } from '../../../models/carte.model';
 
 interface CarteAffichage extends CarteDiplomatique {
   joursRestants: number;
 }
+
+type FiltreBeneficiaire = 'EXPATRIE' | 'MEMBRE' | '';
 
 @Component({
   selector: 'app-cartes-liste',
@@ -24,8 +27,12 @@ export class CartesListeComponent implements OnInit {
   messageErreur: string | null = null;
   termeRecherche = '';
   filtreStatut: StatutCarte | '' = '';
+  filtreBeneficiaire: FiltreBeneficiaire = '';
 
-  constructor(private carteService: CarteService) {}
+  constructor(
+    private carteService: CarteService,
+    public authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.charger();
@@ -57,7 +64,10 @@ export class CartesListeComponent implements OnInit {
         || carte.numeroCarte.toLowerCase().includes(terme)
         || this.beneficiaire(carte).toLowerCase().includes(terme);
       const correspondStatut = !this.filtreStatut || carte.statut === this.filtreStatut;
-      return correspondTerme && correspondStatut;
+      const correspondBeneficiaire = !this.filtreBeneficiaire
+        || (this.filtreBeneficiaire === 'EXPATRIE' && carte.expatrieId !== null)
+        || (this.filtreBeneficiaire === 'MEMBRE' && carte.membreFamilleId !== null);
+      return correspondTerme && correspondStatut && correspondBeneficiaire;
     });
   }
 

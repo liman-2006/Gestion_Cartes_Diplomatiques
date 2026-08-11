@@ -11,6 +11,8 @@ import { MembreFamille } from '../../../models/membre-famille.model';
 
 type TypeBeneficiaire = 'EXPATRIE' | 'MEMBRE';
 
+const DUREE_VALIDITE_ANNEES = 3;
+
 @Component({
   selector: 'app-carte-formulaire',
   standalone: true,
@@ -54,6 +56,12 @@ export class CarteFormulaireComponent implements OnInit {
 
     this.membreFamilleService.listerTous().subscribe({
       next: (donnees) => (this.membres = donnees)
+    });
+
+    this.formulaire.get('dateExpiration')?.disable();
+
+    this.formulaire.get('dateDelivrance')?.valueChanges.subscribe((dateDelivrance) => {
+      this.formulaire.get('dateExpiration')?.setValue(this.calculerDateExpiration(dateDelivrance));
     });
 
     const renouvellementIdParam = this.route.snapshot.queryParamMap.get('renouvellementId');
@@ -119,7 +127,6 @@ export class CarteFormulaireComponent implements OnInit {
     const requete = {
       numeroCarte: valeurs.numeroCarte!,
       dateDelivrance: valeurs.dateDelivrance!,
-      dateExpiration: valeurs.dateExpiration!,
       expatrieId: valeurs.typeBeneficiaire === 'EXPATRIE' ? Number(beneficiaireChoisi) : null,
       membreFamilleId: valeurs.typeBeneficiaire === 'MEMBRE' ? Number(beneficiaireChoisi) : null,
       renouvellementId: this.renouvellementIdDepuisQuery
@@ -136,5 +143,21 @@ export class CarteFormulaireComponent implements OnInit {
         this.messageErreur = err?.error?.message ?? "Une erreur est survenue.";
       }
     });
+  }
+
+  private calculerDateExpiration(dateDelivrance: string | null): string {
+
+    if (!dateDelivrance) {
+      return '';
+    }
+
+    const date = new Date(dateDelivrance);
+
+    if (isNaN(date.getTime())) {
+      return '';
+    }
+
+    date.setFullYear(date.getFullYear() + DUREE_VALIDITE_ANNEES);
+    return date.toISOString().slice(0, 10);
   }
 }
