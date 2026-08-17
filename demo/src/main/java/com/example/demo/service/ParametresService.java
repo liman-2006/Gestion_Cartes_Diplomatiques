@@ -16,13 +16,23 @@ public class ParametresService {
     private static final int SEUIL_PAR_DEFAUT = 30;
 
     private final ParametresRepository parametresRepository;
+    private final EmailNotificationService emailNotificationService;
 
-    public ParametresService(ParametresRepository parametresRepository) {
+    public ParametresService(
+            ParametresRepository parametresRepository,
+            EmailNotificationService emailNotificationService
+    ) {
         this.parametresRepository = parametresRepository;
+        this.emailNotificationService = emailNotificationService;
     }
 
     public ParametresResponse obtenir() {
         return versResponse(obtenirOuCreer());
+    }
+
+    public void testerEmail() {
+        Parametres parametres = obtenirOuCreer();
+        emailNotificationService.envoyerEmailTest(parametres.getEmailNotification());
     }
 
     public ParametresResponse modifier(ParametresRequest request) {

@@ -154,9 +154,45 @@
   flex-shrink: 0;
 }
 
+.conteneur-notifications {
+  position: relative;
+}
+
 .bouton-notification {
   position: relative;
   border-radius: 50%;
+}
+
+.popup-notifications {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  width: 360px;
+  max-height: 420px;
+  background: var(--couleur-surface);
+  border: 1px solid var(--couleur-bordure);
+  border-radius: var(--rayon);
+  box-shadow: 0 12px 28px rgba(16, 24, 40, 0.18);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.popup-notifications-entete {
+  padding: 0.85rem 1.1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--couleur-bordure);
+}
+
+.popup-notifications-liste {
+  overflow-y: auto;
+  padding: 0.3rem 1.1rem;
+}
+
+.popup-notifications-liste .etat-vide {
+  padding: 1.5rem 0;
 }
 
 .pastille-notification {

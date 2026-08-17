@@ -16,7 +16,6 @@ import { RenouvellementsListeComponent } from './pages/renouvellements/liste/ren
 import { RenouvellementFormulaireComponent } from './pages/renouvellements/formulaire/renouvellement-formulaire.component';
 import { UtilisateursListeComponent } from './pages/utilisateurs/liste/utilisateurs-liste.component';
 import { UtilisateurFormulaireComponent } from './pages/utilisateurs/formulaire/utilisateur-formulaire.component';
-import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { DocumentsComponent } from './pages/documents/documents.component';
 import { RapportsComponent } from './pages/rapports/rapports.component';
 
@@ -47,7 +46,6 @@ export const routes: Routes = [
       { path: 'renouvellements/nouveau', component: RenouvellementFormulaireComponent },
       { path: 'renouvellements/:id/modifier', component: RenouvellementFormulaireComponent },
 
-      { path: 'notifications', component: NotificationsComponent },
       { path: 'documents', component: DocumentsComponent },
       { path: 'rapports', component: RapportsComponent },
 

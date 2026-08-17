@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 import com.example.demo.enums.TypeRenouvellement;
 
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class RenouvellementRequest {
     private TypeRenouvellement typeRenouvellement;
 
     @NotNull(message = "La date programmée est obligatoire")
+    @FutureOrPresent(message = "La date programmée ne peut pas être antérieure à aujourd'hui")
     private LocalDate dateProgrammee;
 
     private String notes;

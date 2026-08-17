@@ -40,6 +40,7 @@
   <div class="champ">
     <label>Date programmée</label>
     <input type="date" formControlName="dateProgrammee" />
+    <span class="erreur" *ngIf="erreur('dateProgrammee', 'La date programmée')">{{ erreur('dateProgrammee', 'La date programmée') }}</span>
   </div>
 
   <div class="champ">

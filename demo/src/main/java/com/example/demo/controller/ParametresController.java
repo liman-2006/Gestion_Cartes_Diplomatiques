@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/parametres")
 public class ParametresController {
@@ -31,5 +33,12 @@ public class ParametresController {
             @Valid @RequestBody ParametresRequest request
     ) {
         return ResponseEntity.ok(parametresService.modifier(request));
+    }
+
+    @PreAuthorize("hasRole('RESPONSABLE')")
+    @PostMapping("/tester-email")
+    public ResponseEntity<Map<String, String>> testerEmail() {
+        parametresService.testerEmail();
+        return ResponseEntity.ok(Map.of("message", "Email de test envoyé avec succès."));
     }
 }

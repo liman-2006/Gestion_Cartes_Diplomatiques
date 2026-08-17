@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { ExpatrieService } from '../../../core/expatrie.service';
+import { dateNonFuture, messageErreurChamp, validateurChiffres, validateurNom } from '../../../core/validateurs';
 
 @Component({
   selector: 'app-expatrie-formulaire',
@@ -23,13 +24,21 @@ export class ExpatrieFormulaireComponent implements OnInit {
   messageErreur: string | null = null;
 
   formulaire = this.fb.group({
-    nom: ['', Validators.required],
-    prenom: ['', Validators.required],
+    nom: ['', [Validators.required, validateurNom]],
+    prenom: ['', [Validators.required, validateurNom]],
     matricule: ['', Validators.required],
-    email: [''],
-    telephone: [''],
-    dateArrivee: ['']
+    email: ['', [Validators.required, Validators.email]],
+    telephone: ['', [Validators.required, validateurChiffres]],
+    dateArrivee: ['', [Validators.required, dateNonFuture()]]
   });
+
+  erreur(champ: string, libelle: string): string | null {
+    const controle = this.formulaire.get(champ);
+    if (!controle || !controle.touched) {
+      return null;
+    }
+    return messageErreurChamp(controle.errors, libelle);
+  }
 
   get modeEdition(): boolean {
     return this.id !== null;
@@ -58,6 +67,7 @@ export class ExpatrieFormulaireComponent implements OnInit {
 
     if (this.formulaire.invalid) {
       this.formulaire.markAllAsTouched();
+      this.messageErreur = "Veuillez corriger les champs en rouge avant de continuer.";
       return;
     }
 
@@ -69,9 +79,9 @@ export class ExpatrieFormulaireComponent implements OnInit {
       nom: valeurs.nom!,
       prenom: valeurs.prenom!,
       matricule: valeurs.matricule!,
-      email: valeurs.email || null,
-      telephone: valeurs.telephone || null,
-      dateArrivee: valeurs.dateArrivee || null
+      email: valeurs.email!,
+      telephone: valeurs.telephone!,
+      dateArrivee: valeurs.dateArrivee!
     };
 
     const observable = this.modeEdition

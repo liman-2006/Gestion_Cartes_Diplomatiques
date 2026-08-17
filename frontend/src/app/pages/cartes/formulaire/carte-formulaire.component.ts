@@ -8,6 +8,7 @@ import { ExpatrieService } from '../../../core/expatrie.service';
 import { MembreFamilleService } from '../../../core/membre-famille.service';
 import { Expatrie } from '../../../models/expatrie.model';
 import { MembreFamille } from '../../../models/membre-famille.model';
+import { dateNonFuture, messageErreurChamp } from '../../../core/validateurs';
 
 type TypeBeneficiaire = 'EXPATRIE' | 'MEMBRE';
 
@@ -37,12 +38,20 @@ export class CarteFormulaireComponent implements OnInit {
 
   formulaire = this.fb.group({
     numeroCarte: ['', Validators.required],
-    dateDelivrance: ['', Validators.required],
+    dateDelivrance: ['', [Validators.required, dateNonFuture()]],
     dateExpiration: ['', Validators.required],
     typeBeneficiaire: ['EXPATRIE' as TypeBeneficiaire, Validators.required],
     expatrieId: [null as number | null],
     membreFamilleId: [null as number | null]
   });
+
+  erreur(champ: string, libelle: string): string | null {
+    const controle = this.formulaire.get(champ);
+    if (!controle || !controle.touched) {
+      return null;
+    }
+    return messageErreurChamp(controle.errors, libelle);
+  }
 
   get modeEdition(): boolean {
     return this.id !== null;
@@ -107,6 +116,7 @@ export class CarteFormulaireComponent implements OnInit {
 
     if (this.formulaire.invalid) {
       this.formulaire.markAllAsTouched();
+      this.messageErreur = "Veuillez corriger les champs en rouge avant de continuer.";
       return;
     }
 

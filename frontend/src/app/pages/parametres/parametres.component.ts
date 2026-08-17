@@ -16,6 +16,7 @@ export class ParametresComponent implements OnInit {
   private parametresService = inject(ParametresService);
 
   chargement = false;
+  testEnCours = false;
   messageErreur: string | null = null;
   messageSucces: string | null = null;
 
@@ -71,6 +72,24 @@ export class ParametresComponent implements OnInit {
       error: (err) => {
         this.chargement = false;
         this.messageErreur = err?.error?.message ?? "Une erreur est survenue.";
+      }
+    });
+  }
+
+  testerEmail(): void {
+
+    this.testEnCours = true;
+    this.messageErreur = null;
+    this.messageSucces = null;
+
+    this.parametresService.testerEmail().subscribe({
+      next: (reponse) => {
+        this.testEnCours = false;
+        this.messageSucces = reponse.message;
+      },
+      error: (err) => {
+        this.testEnCours = false;
+        this.messageErreur = err?.error?.message ?? "Impossible d'envoyer l'email de test.";
       }
     });
   }

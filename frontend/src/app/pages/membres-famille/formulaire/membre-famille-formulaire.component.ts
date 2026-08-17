@@ -6,6 +6,9 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MembreFamilleService } from '../../../core/membre-famille.service';
 import { ExpatrieService } from '../../../core/expatrie.service';
 import { Expatrie } from '../../../models/expatrie.model';
+import { dateNonFuture, messageErreurChamp, validateurNom } from '../../../core/validateurs';
+
+export const LIENS_PARENTE = ['Conjoint(e)', 'Enfant', 'Père', 'Mère', 'Frère', 'Sœur', 'Autre'];
 
 @Component({
   selector: 'app-membre-famille-formulaire',
@@ -25,14 +28,23 @@ export class MembreFamilleFormulaireComponent implements OnInit {
   chargement = false;
   messageErreur: string | null = null;
   expatries: Expatrie[] = [];
+  liensParente = LIENS_PARENTE;
 
   formulaire = this.fb.group({
-    nom: ['', Validators.required],
-    prenom: ['', Validators.required],
-    lienParente: [''],
-    dateNaissance: [''],
+    nom: ['', [Validators.required, validateurNom]],
+    prenom: ['', [Validators.required, validateurNom]],
+    lienParente: ['', Validators.required],
+    dateNaissance: ['', [Validators.required, dateNonFuture()]],
     expatrieId: [null as number | null, Validators.required]
   });
+
+  erreur(champ: string, libelle: string): string | null {
+    const controle = this.formulaire.get(champ);
+    if (!controle || !controle.touched) {
+      return null;
+    }
+    return messageErreurChamp(controle.errors, libelle);
+  }
 
   get modeEdition(): boolean {
     return this.id !== null;
@@ -66,6 +78,7 @@ export class MembreFamilleFormulaireComponent implements OnInit {
 
     if (this.formulaire.invalid) {
       this.formulaire.markAllAsTouched();
+      this.messageErreur = "Veuillez corriger les champs en rouge avant de continuer.";
       return;
     }
 
@@ -76,8 +89,8 @@ export class MembreFamilleFormulaireComponent implements OnInit {
     const requete = {
       nom: valeurs.nom!,
       prenom: valeurs.prenom!,
-      lienParente: valeurs.lienParente || null,
-      dateNaissance: valeurs.dateNaissance || null,
+      lienParente: valeurs.lienParente!,
+      dateNaissance: valeurs.dateNaissance!,
       expatrieId: Number(valeurs.expatrieId)
     };
 

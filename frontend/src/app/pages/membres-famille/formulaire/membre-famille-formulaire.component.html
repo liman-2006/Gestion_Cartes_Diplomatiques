@@ -15,26 +15,34 @@
         {{ expatrie.prenom }} {{ expatrie.nom }} ({{ expatrie.matricule }})
       </option>
     </select>
+    <span class="erreur" *ngIf="erreur('expatrieId', 'L\'expatrié rattaché')">{{ erreur('expatrieId', 'L\'expatrié rattaché') }}</span>
   </div>
 
   <div class="champ">
     <label for="nom">Nom</label>
     <input id="nom" type="text" formControlName="nom" />
+    <span class="erreur" *ngIf="erreur('nom', 'Le nom')">{{ erreur('nom', 'Le nom') }}</span>
   </div>
 
   <div class="champ">
     <label for="prenom">Prénom</label>
     <input id="prenom" type="text" formControlName="prenom" />
+    <span class="erreur" *ngIf="erreur('prenom', 'Le prénom')">{{ erreur('prenom', 'Le prénom') }}</span>
   </div>
 
   <div class="champ">
     <label for="lienParente">Lien de parenté</label>
-    <input id="lienParente" type="text" formControlName="lienParente" placeholder="Conjoint, enfant, ..." />
+    <select id="lienParente" formControlName="lienParente">
+      <option value="" disabled>Sélectionner un lien de parenté</option>
+      <option *ngFor="let lien of liensParente" [value]="lien">{{ lien }}</option>
+    </select>
+    <span class="erreur" *ngIf="erreur('lienParente', 'Le lien de parenté')">{{ erreur('lienParente', 'Le lien de parenté') }}</span>
   </div>
 
   <div class="champ">
     <label for="dateNaissance">Date de naissance</label>
     <input id="dateNaissance" type="date" formControlName="dateNaissance" />
+    <span class="erreur" *ngIf="erreur('dateNaissance', 'La date de naissance')">{{ erreur('dateNaissance', 'La date de naissance') }}</span>
   </div>
 
   <button type="submit" class="bouton bouton-primaire" [disabled]="chargement">

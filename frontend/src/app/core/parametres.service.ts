@@ -19,4 +19,8 @@ export class ParametresService {
   modifier(request: ParametresRequest): Observable<Parametres> {
     return this.http.put<Parametres>(this.baseUrl, request);
   }
+
+  testerEmail(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}/tester-email`, {});
+  }
 }

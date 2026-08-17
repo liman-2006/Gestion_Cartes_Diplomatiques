@@ -10,31 +10,37 @@
   <div class="champ">
     <label for="nom">Nom</label>
     <input id="nom" type="text" formControlName="nom" />
+    <span class="erreur" *ngIf="erreur('nom', 'Le nom')">{{ erreur('nom', 'Le nom') }}</span>
   </div>
 
   <div class="champ">
     <label for="prenom">Prénom</label>
     <input id="prenom" type="text" formControlName="prenom" />
+    <span class="erreur" *ngIf="erreur('prenom', 'Le prénom')">{{ erreur('prenom', 'Le prénom') }}</span>
   </div>
 
   <div class="champ">
     <label for="matricule">Matricule</label>
     <input id="matricule" type="text" formControlName="matricule" />
+    <span class="erreur" *ngIf="erreur('matricule', 'Le matricule')">{{ erreur('matricule', 'Le matricule') }}</span>
   </div>
 
   <div class="champ">
     <label for="email">Email</label>
     <input id="email" type="email" formControlName="email" />
+    <span class="erreur" *ngIf="erreur('email', 'L\'email')">{{ erreur('email', 'L\'email') }}</span>
   </div>
 
   <div class="champ">
     <label for="telephone">Téléphone</label>
     <input id="telephone" type="text" formControlName="telephone" />
+    <span class="erreur" *ngIf="erreur('telephone', 'Le téléphone')">{{ erreur('telephone', 'Le téléphone') }}</span>
   </div>
 
   <div class="champ">
     <label for="dateArrivee">Date d'arrivée</label>
     <input id="dateArrivee" type="date" formControlName="dateArrivee" />
+    <span class="erreur" *ngIf="erreur('dateArrivee', 'La date d\'arrivée')">{{ erreur('dateArrivee', 'La date d\'arrivée') }}</span>
   </div>
 
   <button type="submit" class="bouton bouton-primaire" [disabled]="chargement">

@@ -8,6 +8,7 @@ import { ExpatrieService } from '../../../core/expatrie.service';
 import { AuthService } from '../../../core/auth.service';
 import { Expatrie } from '../../../models/expatrie.model';
 import { Renouvellement, TypeRenouvellement } from '../../../models/renouvellement.model';
+import { dateNonPassee, messageErreurChamp } from '../../../core/validateurs';
 
 @Component({
   selector: 'app-renouvellement-formulaire',
@@ -34,9 +35,17 @@ export class RenouvellementFormulaireComponent implements OnInit {
   formulaire = this.fb.group({
     expatrieId: [null as number | null, Validators.required],
     typeRenouvellement: ['EMPLOYE_SEUL' as TypeRenouvellement, Validators.required],
-    dateProgrammee: ['', Validators.required],
+    dateProgrammee: ['', [Validators.required, dateNonPassee()]],
     notes: ['']
   });
+
+  erreur(champ: string, libelle: string): string | null {
+    const controle = this.formulaire.get(champ);
+    if (!controle || !controle.touched) {
+      return null;
+    }
+    return messageErreurChamp(controle.errors, libelle);
+  }
 
   get modeEdition(): boolean {
     return this.id !== null;
@@ -87,6 +96,7 @@ export class RenouvellementFormulaireComponent implements OnInit {
 
     if (this.formulaire.invalid) {
       this.formulaire.markAllAsTouched();
+      this.messageErreur = "Veuillez corriger les champs en rouge avant de continuer.";
       return;
     }
 

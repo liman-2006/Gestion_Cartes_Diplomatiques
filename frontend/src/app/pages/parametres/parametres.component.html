@@ -25,6 +25,20 @@
   <div class="champ">
     <label>Email de notification</label>
     <input type="email" formControlName="emailNotification" />
+    <span class="indication-champ">
+      Une synthèse (cartes expirées / à renouveler) est envoyée automatiquement à cette adresse chaque nuit, et à chaque recalcul manuel des statuts.
+    </span>
+  </div>
+
+  <div class="champ">
+    <button
+      type="button"
+      class="bouton bouton-secondaire"
+      [disabled]="testEnCours || !formulaire.get('notificationsEmailActivees')?.value || !formulaire.get('emailNotification')?.value"
+      (click)="testerEmail()"
+    >
+      {{ testEnCours ? 'Envoi en cours...' : "Tester l'envoi d'email" }}
+    </button>
   </div>
 
   <div class="champ">
@@ -34,11 +48,8 @@
   <div class="champ">
     <label>Téléphone de notification</label>
     <input type="text" formControlName="telephoneNotification" />
+    <span class="indication-champ">Les notifications SMS ne sont pas encore envoyées automatiquement — seule la préférence est enregistrée.</span>
   </div>
-
-  <p class="etat-vide">
-    Ces notifications ne sont pas encore envoyées automatiquement (aucune intégration email/SMS n'est configurée) — seule la préférence est enregistrée.
-  </p>
 
   <button type="submit" class="bouton bouton-primaire" [disabled]="chargement">Enregistrer</button>
 </form>

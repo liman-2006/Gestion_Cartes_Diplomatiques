@@ -14,11 +14,13 @@
   <div class="champ">
     <label for="numeroCarte">Numéro de carte</label>
     <input id="numeroCarte" type="text" formControlName="numeroCarte" />
+    <span class="erreur" *ngIf="erreur('numeroCarte', 'Le numéro de carte')">{{ erreur('numeroCarte', 'Le numéro de carte') }}</span>
   </div>
 
   <div class="champ">
     <label for="dateDelivrance">Date de délivrance</label>
     <input id="dateDelivrance" type="date" formControlName="dateDelivrance" />
+    <span class="erreur" *ngIf="erreur('dateDelivrance', 'La date de délivrance')">{{ erreur('dateDelivrance', 'La date de délivrance') }}</span>
   </div>
 
   <div class="champ">
